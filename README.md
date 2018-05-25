@@ -12,7 +12,6 @@
 ## 效果展示
 
 - 响应式布局首页
-![image](https://github.com/iview/iview-admin/raw/dev/github-gif/home.gif)
 
 
 
