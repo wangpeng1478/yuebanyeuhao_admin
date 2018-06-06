@@ -258,7 +258,7 @@
                          <span slot="append">%</span>
                        </Input>
                     </Col>
-                    <Col style='padding: 2px 2px 2px 0;' :xs="5" :sm="4" :md="4" :lg="4">
+                    <Col style='display: none' :xs="5" :sm="4" :md="4" :lg="4">
                        <Button @click="data.introduce.vlu_6 = !data.introduce.vlu_6" 
                        :type="data.introduce.vlu_6?'error':'dashed'" 
                        size="small" style="margin-left:3px">{{data.introduce.vlu_6?'隐藏':'已隐藏'}}</Button>
@@ -303,7 +303,7 @@
                          <span slot="append">%</span>
                        </Input>
                     </Col>
-                    <Col style='padding: 2px 2px 2px 0;' :xs="5" :sm="4" :md="4" :lg="4">
+                    <Col style='display: none' :xs="5" :sm="4" :md="4" :lg="4">
                        <Button @click="data.Property.vlu_6 = !data.Property.vlu_6" 
                        :type="data.Property.vlu_6?'error':'dashed'" 
                        size="small" style="margin-left:3px">{{data.Property.vlu_6?'隐藏':'已隐藏'}}</Button>
@@ -383,7 +383,7 @@
                          <span slot="append">%</span>
                        </Input>
                     </Col>
-                    <Col style='padding: 2px 2px 2px 0;' :xs="5" :sm="4" :md="4" :lg="4">
+                    <Col style='display: none' :xs="5" :sm="4" :md="4" :lg="4">
                        <Button @click="data.Rental.vlu_6 = !data.Rental.vlu_6" 
                        :type="data.Rental.vlu_6?'error':'dashed'" 
                        size="small" style="margin-left:3px">{{data.Rental.vlu_6?'隐藏':'已隐藏'}}</Button>
@@ -732,6 +732,7 @@ export default {
       this.ajaxName();
       this.adminname();
       this.datiename();
+
     },
     methods: {
       xiangjia(){
@@ -1276,12 +1277,18 @@ export default {
                        return false;
              }
              if (this.xiangjias !==100) {
-                this.$Notice.warning({
+                 this.$Notice.warning({
                         title: '业绩不是 100% 无法提交',
                       });
                        return false;
              }
-
+             if (this.$refs.file.data.length == 0) {
+                 this.$Notice.warning({
+                        title: '上传文件',
+                      });
+                       return false;
+             }
+             // console.log(this.$refs.file.data.length)
              // return false;
              let _this = this;
              _this.loading = true;

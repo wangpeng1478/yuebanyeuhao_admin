@@ -250,7 +250,7 @@
              </Card>
           </Col>
         </Row>
-        <Row>
+        <Row style="display: none;">
           <Col :xs="24" :sm="24" :md="12" :lg="8">
              <FormItem label="客户等级"  class="ivu-form-item-required">
                 <RadioGroup v-model="clientadd.grade" type="button">
@@ -322,8 +322,9 @@
         <Row>
           <Col :xs="24" :sm="24" :md="12" :lg="6">
              <FormItem label="来源">
-                <Cascader :data="Cascaderdata" v-model="clientadd.sourcx" :disabled="!masterok2"></Cascader>
-                <Input :disabled="!masterok2" v-if="clientadd.sourcx[1] == '自定义'||clientadd.sourcx[0] == '介绍'" v-model="clientadd.customize" placeholder="自定义" style="margin-top:5px;"></Input>
+               <Cascader :data="Cascaderdata" v-model="clientadd.sourcx" ></Cascader>
+                <Input v-if="clientadd.sourcx[1] == '自定义'" v-model="clientadd.customize" placeholder="自定义" style="margin-top:5px;"></Input>
+                <Input v-if="clientadd.sourcx[1] == '朋友介绍显示'||clientadd.sourcx[1] == '朋友介绍隐藏'" v-model="clientadd.customize" placeholder="请填写介绍人姓名或备注" style="margin-top:5px;"></Input>
              </FormItem>
           </Col>
         </Row>

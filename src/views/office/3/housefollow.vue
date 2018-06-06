@@ -258,7 +258,7 @@
    <pre>{{Timeline}}</pre>
    <pre>{{followUp}}</pre>
    <pre>{{plus}} - {{reduce}}</pre>
-     <Row>
+     <Row v-if="!modal2r">
         <Col :xs="24" :sm="24" :md="8" :lg="6" style="padding:5px">
            <Card style="margin-bottom: 10px;max-height: 500px;overflow: auto;">
               <p slot="title">
@@ -499,6 +499,25 @@
         </Col>
     </Row>
 
+
+    <Modal v-model="modal2r" width="400" :closable="false" :mask-closable="false">
+        <p slot="header">
+            <span>跟进提示</span>
+        </p>
+        <div>
+            <Alert type="error" show-icon>
+              您上次查看的房源:
+              <span slot="desc">
+                  {{popupdata.rema}}<br />
+                  没有及时填写跟进，请先填写上次跟进
+              </span>
+           </Alert>
+        </div>
+        <div slot="footer" style="text-align:left">
+            <Button type="error" @click="makeout(popupdata.roid)">点击填写</Button>
+        </div>
+    </Modal>
+
    </div>
 </template>
 
@@ -512,6 +531,8 @@ export default {
       data () {
           return {
              id:'',
+             modal2r:false,
+             popupdata:{},
              roid:'',
              plus:'',
              reduce:'',
@@ -568,6 +589,10 @@ export default {
                   headers:{Authorization:'Bearer '+Cookies.set('keya')},
                })
               .then(function(res){
+                // console.log(res.data.message.popup.date)
+                // console.log(res.data.message.popup.power)
+                _this.modal2r = res.data.message.popup.power
+                _this.popupdata = res.data.message.popup.date
                  _this.plus = res.data.message.plus
                  _this.reduce = res.data.message.reduce
                  _this.louman = res.data.message.louman
@@ -606,7 +631,7 @@ export default {
               headers:{Authorization:'Bearer '+Cookies.set('keya')},
            })
           .then(function (res) {
-             // console.log(res.data)
+             // console.log(res)
              if (res.data.message.img.length == 0) {
               _this.imgyesNOs = false
              }else{
@@ -781,6 +806,12 @@ export default {
                   this.id = this.plus
                }
               }
+            },
+            makeout(e){
+               // console.log(e)
+               this.nameC(e); //data
+               this.recording(e); //data
+               this.id = e
             }
 
         }

@@ -267,7 +267,6 @@
           <Page class="cf pages" :total="totals" :page-size="pageSize"  @on-change="changepage" show-total show-elevator></Page>
         </div>
       </div>
-
       </div>
     </Card>
    </div>
@@ -286,6 +285,7 @@ export default {
             totals: 50, //总页数
             pageSize: 20, //每页显示
             spinShow: true,
+            modal2r: true,
             screense:false,// true 有搜索条件 false 无搜索条件
              options2: {
                     shortcuts: [

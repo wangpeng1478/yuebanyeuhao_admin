@@ -176,9 +176,9 @@
        <Page class="cf pages" :total="totals" :page-size="pageSize" @on-change="changepage" show-total show-elevator></Page>
         <Modal
         v-model="removes"
-        title="确定删除？"
+        title="警告"
         @on-ok="removesok(removesnus)">
-        <Alert type="warning" show-icon>A warning prompt</Alert>
+        <Alert type="warning" show-icon>确定删除？</Alert>
     </Modal>
     </div>
     </Card>
@@ -424,7 +424,19 @@ export default {
         },
         methods:{
           removesok(e){
-            console.log(e)
+            let _this = this;
+            axios({
+                method:'post',
+                url:'/api/officedel?id='+e,
+                headers:{Authorization:'Bearer '+Cookies.set('keya')},
+             })
+            .then(function (res) {
+              _this.buildingls(1); //类表
+              _this.$Message.success('删除成功');
+            })
+            .catch(function (err) {
+                _this.$Notice.error({title: '类表错误'});
+            })
           },
           buildingls(e){
             let _this = this;

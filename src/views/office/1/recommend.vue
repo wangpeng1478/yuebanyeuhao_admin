@@ -1040,7 +1040,8 @@ export default {
                     _this.loading3 = false
                    }else if(e ==3){
                     _this.WXsou = true;
-                    _this.WXsouimg = 'http://pan.baidu.com/share/qrcode?w=250&h=250&url='+res.data.message[2]
+                    let url = 'http://47.98.155.165/admin/pdf/web/viewer.html?file='+res.data.message[2]
+                    _this.WXsouimg = 'http://pan.baidu.com/share/qrcode?w=250&h=250&url='+url
                     _this.loading1 = false
                    }
                 })

@@ -101,7 +101,7 @@
         </Card>
         <Card v-else>加载中</Card>
         <Card style="margin-top:15px;">
-            <Button type="success" :loading="loading" long>修改</Button>
+            <Button type="success" :loading="loading" long @click="xiugaiyeno">修改</Button>
         </Card>
     </div>
 </template>
@@ -127,7 +127,7 @@ export default {
         }
     },
     mounted() {
-       
+       this.datase();
     },
     methods: {
        datase(){
@@ -135,15 +135,34 @@ export default {
              _this.loading2 = false
                axios({
                     method: 'post',
-                    url: '/api/suzulist',
+                    url: '/api/warnup1',
+                    headers: { Authorization: 'Bearer ' + Cookies.set('keya') },
+                })
+                .then(function(res) {
+                   _this.time = res.data.message.time
+                   _this.loading2 = true
+                })
+                .catch(function(err) {
+                    _this.$Notice.error({ title: '错误' });
+                })
+       },
+       xiugaiyeno(){
+           let _this = this;
+             _this.loading = true
+               axios({
+                    method: 'post',
+                    url: '/api/warnup2',
                     headers: { Authorization: 'Bearer ' + Cookies.set('keya') },
                     data:{
-                      jo:_this.screens
+                        jo:{
+                         time:_this.time
+                        }
                     }
                 })
                 .then(function(res) {
-                  // _this.time = 
-                   _this.loading2 = true
+                   _this.$Message.success('修改成功');
+                   _this.loading = false
+                   _this.datase();
                 })
                 .catch(function(err) {
                     _this.$Notice.error({ title: '错误' });

@@ -31,12 +31,12 @@
     <pre>{{screens}}</pre>
         <Card style="margin-bottom:15px;">
             <Form :model="screens" label-position="right" :label-width="100" inline>
-                <FormItem label="申请人" style="margin-bottom:0">
+                <FormItem label="申请人" style="margin:3px 0">
                      <Select v-model="screens.luru" filterable clearable>
                               <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                           </Select>
                 </FormItem>
-                 <FormItem label="状态" style="margin-bottom:0">
+                 <FormItem label="状态" style="margin:3px 0">
                     <RadioGroup v-model="screens.type" type="button">
                       <Radio label="全部"></Radio>
                       <Radio label="待审核"></Radio>

@@ -102,7 +102,7 @@
             }
             .li1 {
                 padding: 5px;
-                h2 {
+                h3 {
                     margin: 5px 0;
                     overflow: hidden;
                     white-space: nowrap;
@@ -203,9 +203,9 @@
                 <ul class="list cf">
                     <li class="li cf" v-for="item in Sdatd" :key="item.length">
                         <Col class='li1 cf' :xs="24" :sm="12" :md="12" :lg="12">
-                        <h2>
+                        <h3>
                      <a :title='item.name' href="#" @click.prevent="Dealkan(item.id)" >{{item.name}}</a>
-                     </h2>
+                     </h3>
                         <span :title='item.id'>ID:{{item.id}}</span>
                         </Col>
                         <Col class='li2 cf' :xs="12" :sm="6" :md="6" :lg="6">

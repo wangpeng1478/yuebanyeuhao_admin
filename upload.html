@@ -5,37 +5,41 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no">
   <meta name="format-detection" content="telephone=no">
+  <link rel="shortcut icon" href="http://www.yuebanyuehao.com/servicing_shop/extend/images/favicon50x50.png" type="image/x-icon" />
   <!-- 是否删除默认的苹果工具栏和菜单栏 -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <!-- UC强制全屏 -->
   <meta name="full-screen" content="yes">
   <!-- QQ强制全屏 -->
-  <title>悦办越好图片上传</title>
-  <meta name="description" content="悦办越好图片上传">
-  <meta name="keywords" content="悦办越好图片上传">
+  <title>选址推荐书 - 上海德御房地产经纪事务所</title>
+  <meta name="description" content="选址推荐书 - 上海德御房地产经纪事务所">
+  <meta name="keywords" content="选址推荐书 - 上海德御房地产经纪事务所">
   <link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/iview/2.13.0/styles/iview.css">
   <script type="text/javascript" src="https://cdn.bootcss.com/vue/2.5.12/vue.min.js"></script>
   <script type="text/javascript" src="https://cdn.bootcss.com/iview/2.13.0/iview.min.js"></script>
   <style>
+  html,body{
+    background: #fff url(http://47.98.155.165/image/vueAdmin/phone_bg.jpg);
+  }
   .upload{
-  	padding: 0.170667rem;
+    padding: 0.170667rem;
   }
   .Uploadsee{
-  	width: 100%;
+    width: 100%;
   }
   .Uploadsee .ivu-upload-select{
-  	width: 100%;
+    width: 100%;
   }
   .Uploadsee .ivu-upload-select .ivu-icon{
-  	 font-size: 0.341333rem;
-  	 color: #2d8cf0;
+     font-size: 0.341333rem;
+     color: #2d8cf0;
   }
   .Uploadsee .ivu-upload-select .ivu-upload-drag{
-  	 padding: 0.170667rem
+     padding: 0.170667rem
   }
   .uploadimg{
-  	display: flex;
+    display: flex;
     align-items: center;
     flex-wrap: wrap;
     border-bottom: 1px solid #dddee1;
@@ -43,7 +47,7 @@
     padding-bottom: 10px;
   }
   .uploadimg a{
-  	width: 25%;
+    width: 25%;
   }
   .uploadimg img{
     width: 100%;
@@ -51,19 +55,19 @@
     padding: 0 3%;
   }
   .buttons{
-  	font-size: 11px;
+    font-size: 11px;
     padding: 1.706665rem 0 0.170667rem 0;
     color: #c1c1c1;
     text-align: center;
   }
   .ivu-upload-list .ivu-upload-list-file{
-  	margin: 0.170667rem 0;
+    margin: 0.170667rem 0;
   }
   .ivu-alert{
-  	margin: 0.170667rem 0;
+    margin: 0.170667rem 0;
   }
   pre{
-  	width: 100%;
+    width: 100%;
   }
   </style>
 </head>
@@ -103,7 +107,7 @@
             <Icon type="ios-cloud-upload"></Icon>
             <p>点击上传图片</p>
         </div>
-	    </Upload>
+      </Upload>
           <Alert show-icon>上传完毕后点击网页中的 <b>“我已上传完毕”</b> 即可</Alert>
           <p class="buttons">Copyright © 2013-2018 All Rights Reserved. 上海德御房地产经纪事务所版权所有 </p>
         </div>
@@ -124,7 +128,7 @@
       img:[]
     },
     mounted(){
-    	this.keys = {
+      this.keys = {
             key: 'key',
             name:'admin'
         };
@@ -132,10 +136,10 @@
         let data2 = data1.replace(/data=/, "")
         let data3 = data2.split(',')
         if (data3.length ==2) {
-        	this.actionUrl = '/api/webup?webid='+data3[0]+'&master='+data3[1]
-        	this.spinShow = false;
+          this.actionUrl = '/api/webup?webid='+data3[0]+'&master='+data3[1]
+          this.spinShow = false;
         }else{
-        	this.$Notice.error({
+          this.$Notice.error({
                     title: '错误',
                     desc:'没有获取到URL参数或参数错误',
                     duration: 0
@@ -150,7 +154,7 @@
        onProgress(event, file, fileList){
        },
        onSuccess(response, file, fileList){
-       	 // ok
+         // ok
           console.log(response.message)
           this.img.push({
             url:'http://47.98.155.165'+response.message

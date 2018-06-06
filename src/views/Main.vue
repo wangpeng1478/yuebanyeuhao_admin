@@ -251,7 +251,9 @@
                 let messageCount = 3;
                 this.messageCount = messageCount.toString();
                 this.checkTag(this.$route.name);
-                this.$store.commit('setMessageCount', 4);
+                // this.$store.commit('setMessageCount', 40);
+
+                // console.log(this.$store.state.app.messageCount)
             },
             toggleClick () {
                 this.shrink = !this.shrink;

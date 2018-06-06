@@ -16,6 +16,7 @@ import axios from 'axios'
         },
         mounted(){
           // console.log(Cookies.set('user'))
+          // https://github.com/js-cookie/js-cookie
         },
         methods: {
           
@@ -56,7 +57,7 @@ html,body{
     border-radius: 2px;
 }
  pre {
-     /*display: none;*/
+     display: none;
      background: #495060;
      color: #e2e2e2;
      padding: 10px;
@@ -64,4 +65,7 @@ html,body{
      max-height: 300px;
      overflow: auto;
  }
+.building .input-group span {
+    width: 25% !important;
+}
 </style>

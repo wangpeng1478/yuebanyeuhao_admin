@@ -59,20 +59,19 @@
             </p>
             <Form :model="screens" :label-width="80">
                 <Row>
-                    <Col :xs="24" :sm="12" :md="12" :lg="4">
+                    <Col :xs="24" :sm="12" :md="12" :lg="5">
                       <FormItem label="时间" style="margin:5px 0;">
                           <DatePicker style="width:100%" v-model="screens.time" type="daterange" :options="options2"></DatePicker>
                       </FormItem>
                     </Col>
-                    <Col :xs="24" :sm="12" :md="12" :lg="4">
+                    <Col :xs="24" :sm="12" :md="12" :lg="5">
                       <FormItem label="归属人" style="margin:5px 0;">
                           <Cascader class="caca" :data="cityList" v-model="screens.cacaDer" placeholder="部门/人员" change-on-select></Cascader>
                       </FormItem>
                     </Col>
-                    <Col :xs="24" :sm="24" :md="24" :lg="15">
+                    <Col :xs="24" :sm="24" :md="24" :lg="10">
                       <FormItem label="类型" style="margin:5px 0;">
                             <RadioGroup v-model="screens.type" type="button">
-                                <Radio label="全部"></Radio>
                                 <Radio label="房源跟进"></Radio>
                                 <Radio label="客户跟进"></Radio>
                             </RadioGroup>
@@ -84,7 +83,7 @@
         </Card>
         <Card class='titims'>
             <div class="cf">
-                <div class="rigths">共:<b>{{totalss}} </b>张</div>
+                <div class="rigths">共:<b>{{totals}} </b>条</div>
             </div>
         </Card>
         <Card class="padd10">
@@ -147,23 +146,29 @@ export default {
                 ]
             },
             screens: {
-                
+                time:[],
+                cacaDer:[],
+                type:'房源跟进'
             },
             HouseTable: [
                     {
                         title: 'ID',
+                        width: 80,
                         key: 'id'
                     },
                     {
                         title: '门牌号',
+                        width: 200,
                         key: 'men'
                     },
                     {
                         title: '跟进人',
+                        width: 100,
                         key: 'ren'
                     },
                     {
                         title: '跟进时间',
+                        width: 200,
                         key: 'time'
                     },
                     {
@@ -171,7 +176,13 @@ export default {
                         key: 'con'
                     },
             ],
-            HouseTableData: [],
+            HouseTableData: [{
+                id:'',
+                men:'门牌号',
+                ren:'跟进人',
+                time:'跟进时间',
+                con:'内容',
+            }],
         }
     },
     mounted() {
@@ -203,7 +214,7 @@ export default {
             _this.loadings = true;
             axios({
                     method: 'post',
-                    url: '/api/imglist?page=' + e,
+                    url: '/api/traclist?page=' + e,
                     headers: { Authorization: 'Bearer ' + Cookies.set('keya') },
                     data: {
                         jo: _this.screens
@@ -212,20 +223,27 @@ export default {
                 .then(function(res) {
                     _this.loadings = false;
                     // console.log(res)
-                    // _this.HouseTableData = res.data.message.data; //列表数据
-                    // _this.pageSize = res.data.message.pageSize; //每页显示
-                    // _this.totals = res.data.message.totals; //总数
-                    // _this.totalss = res.data.message.totals2
+                    _this.HouseTableData = res.data.message.data; //列表数据
+                    _this.pageSize = res.data.message.pageSize; //每页显示
+                    _this.totals = res.data.message.totals; //总数
                 })
                 .catch(function(err) {
                     _this.$Notice.error({ title: '错误' });
                 })
         },
         changepage(page) {
-             this.loadings = true;
+             // this.loadings = true;
              this.showHidese(page);
         },
 
+    },
+    watch: {
+        screens: {
+            handler: function(val, oldVal) {
+               this.showHidese(1)
+            },
+            deep: true
+        },
     }
 };
 </script>

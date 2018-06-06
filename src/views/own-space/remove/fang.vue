@@ -268,9 +268,9 @@
       </div>
  <Modal
         v-model="removes"
-        title="确定删除？"
+        title="警告"
         @on-ok="removesok(removesnus)">
-        <Alert type="warning" show-icon>A warning prompt</Alert>
+        <Alert type="warning" show-icon>确定删除？</Alert>
     </Modal>
       </div>
     </Card>
@@ -726,9 +726,23 @@ export default {
         },
         methods:{
           removesok(e){
-            console.log(e)
+            let _this = this;
+             axios({
+              method:'post',
+              url:'/api/outordel?id='+e,
+              headers:{Authorization:'Bearer '+Cookies.set('keya')},
+           })
+            .then(function (res) {
+               // console.log(res)
+               _this.showHide(1)
+               _this.$Message.success('删除成功');
+            })
+            .catch(function (err) {
+                _this.$Notice.error({title: '删除失败'});
+            })
+
           },
-         ajaxName(e){
+         ajaxName(){
           let _this = this;
            _this.loading1 = true;
           axios({

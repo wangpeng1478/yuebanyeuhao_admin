@@ -182,12 +182,16 @@
                             <Checkbox v-model="rememberPassword">记住密码</Checkbox>
                         </FormItem>
                         <FormItem>
-                            <Button @click="handleSubmit" type="primary" long>
-                                <span v-if="spinShow">登录</span>
-                                <span v-else><Icon type="load-c" size="13" class="demo-spin-icon-load"></Icon></span>
+                            <Button @click="handleSubmit" type="primary" long :loading="spinShow">
+                                <span v-if="!spinShow">登录</span>
+                                <span v-else>登录中...</span>
                             </Button>
                         </FormItem>
-                        <!-- <div class="login-tip">{{region.address}}-{{region.ip}}</div> -->
+                        <div class="login-tip">
+                            <span>{{lives.province}}</span>
+                            <span>{{lives.weather}}</span>
+                            <span>{{lives.temperature}}℃</span>
+                        </div>
                     </Form>
                     <Modal v-model="modals" :mask-closable="false" width="650">
                         <p slot="header" class="h2mp" style="color:red">
@@ -196,7 +200,7 @@
                         <div class="modalss">
                             <h3>解决方案如下！</h3>
                             <ul>
-                                <li style="color:red;">悦办越好管理系统 不支持IE浏览器</li>
+                                <li style="color:red;">悦办越好管理系统 不支持IE浏览器、edge浏览器</li>
                                 <li>使用<b>谷歌浏览器</b>
                                     <Icon type="social-chrome" size="20"></Icon> <a href="http://rj.baidu.com/soft/detail/14744.html?ald" target="_blank">点击下载</a></li>
                                 <li>如果您使用的是360浏览器 请点击地址栏的内核切换按钮 切换到<b>极速模式</b>
@@ -224,6 +228,7 @@
                                 </li>
                                 <li>登录系统时出现提示登录用户名或密码不对的问题 请联系上级或开发人员</li>
                                 <li>如遇到其他问题请联系上级或开发人员。</li>
+                                <li>你还可以将网站地址添加桌面为快捷方式 <a href="javascript:;" @click="deodasda">下载<Icon type="code-download"></Icon></a></li>
                             </ul>
                     </div>
                 </Modal>
@@ -249,9 +254,9 @@
 </template>
 <script>
 import Cookies from 'js-cookie';
-import api from '../api/api';
+// import api from '../api/api';
 import localStorages from '../localStorage/localStorage';
-import $ from 'jquery';
+// import $ from 'jquery';
 import axios from 'axios'
 export default {
     data() {
@@ -274,8 +279,9 @@ export default {
                 ],
             },
             region: [],
+            lives: [],
             rememberPassword: true,
-            spinShow: true,
+            spinShow: false,
             img: '',
             captcha_key: '',
             modals: false,
@@ -306,6 +312,7 @@ export default {
         }
         this.form.verification = ''; //默认验证码
         this.Verification(); //默认验证码
+        this.tianqi(); //默认验证码
         // console.log(Cookies.set('keys'))
     },
     methods: {
@@ -314,6 +321,7 @@ export default {
             this.$refs.loginForm.validate((valid) => {
                 // console.log(valid)
                 if (valid) {
+                    _this.spinShow = true;
                     const msg = this.$Message.loading({
                         content: '登陆中...',
                         duration: 0
@@ -327,9 +335,11 @@ export default {
                         // _this.$Message.destroy(msg) //关闭
                         // console.log(response)
                         // return false;
-                        if (response.data.statusx == 204 || response.data.statusx == 205) {
+                        if (response.data.statusx == 202) {
+                             _this.$Message.destroy()//关闭
                             _this.$Message.error(response.data.message)
                             _this.Verification()
+                            _this.spinShow = false;
                         } else if (response.data.statusx == 200) {
                             // 成功
                             // console.log(response.data.access_token)
@@ -381,11 +391,13 @@ export default {
                         } else {
                             this.$Notice.error({ title: '状态码未知错误' });
                             _this.Verification()
+                            _this.spinShow = false;
                         }
                     }, response => {
                         this.$Notice.error({ title: '登录错误' });
                         _this.$Message.destroy()
                         _this.Verification()
+                        _this.spinShow = false;
                     })
                 }
             });
@@ -428,6 +440,22 @@ export default {
                 document.body.removeChild(eleLink);
             };
             funDownload(eleTextarea, '悦办越好管理系统.url');
+        },
+        tianqi(){ 
+            var _this = this;
+             axios({
+                  method:'get',
+                  url:'http://restapi.amap.com/v3/weather/weatherInfo?key=c90d470e523340097ef7bf9020708814&city=310000'
+               })
+              .then(function (res) {
+                if (res.data.status == 1) {
+                    // console.log(res.data.lives)
+                    _this.lives = res.data.lives[0]
+                }
+              })
+              .catch(function (err) {
+                  // _this.$Notice.error({title: '区域错误'});
+              })
         }
     }
 };

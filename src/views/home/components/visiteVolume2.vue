@@ -36,12 +36,12 @@
                <RadioGroup v-model="RadioGroups" type="button" class="RadioGroups">
                     <Radio label="全部"></Radio>
                     <Radio label="未读"></Radio>
-                    <Radio label="已阅"></Radio>
+                    <Radio label="已读"></Radio>
                     <Radio label="已发送"></Radio>
                 </RadioGroup>
               </p>
 
-               <a href="#" slot="extra" @click.prevent="fangyuaData">
+               <a href="#" slot="extra" @click.prevent="fangyuaData(1)">
                 <Icon type="ios-loop-strong"></Icon>
                 刷新
               </a>
@@ -96,7 +96,7 @@ export default {
                         key: 'type',
                         width: 150,
                         render: (h, params) => {
-                         	const color = params.row.type == '未读' ? 'red' : params.row.type == '已阅' ? '#d8d8d8' : params.row.type == '已发送' ? '#2d8cf0' : '';
+                         	const color = params.row.type == '未读' ? 'red' : params.row.type == '已读' ? '#d8d8d8' : params.row.type == '已发送' ? '#2d8cf0' : '';
                          	return h('Tag', {
                                 props: {
                                     type: 'dot',
@@ -121,8 +121,12 @@ export default {
                                     },
                                     on: {
                                         click: () => {
-                                            //通过
-                                            // params.row.tongguo = true;
+                                            this.lookke(params.row.id)
+                                            let query = { deal_id: params.row.id};
+                                            this.$router.push({
+                                             name: 'clientadd_look',
+                                             query: query
+                                            });
                                         }
                                     }
                                 }, '查看')
@@ -130,47 +134,61 @@ export default {
                         }
                     },
                 ],
-                historyData: [
-                    {
-                     id:'22',
-                     time:'1',
-                     fa:'1', //发信人
-                     con:'1', //内容
-                     type:'未读', //已阅 已发送
-                    },
-                ]
+                historyData: []
             }
         },
         mounted(){
-           this.loading = false
+           this.fangyuaData(1)
         },
         methods:{
-          fangyuaData(){
+          fangyuaData(e){
                  this.loading = true;
                   let _this = this;
                    axios({
                         method: 'post',
-                        url: '/api/suzulist?page=' + e,
+                        url: '/api/warnlist?page=' + e,
                         headers: { Authorization: 'Bearer ' + Cookies.set('keya') },
                         data:{
                           jo:_this.RadioGroups
                         }
                     })
                     .then(function(res) {
+                       // console.log(res)
+                       _this.$store.commit('setMessageCount', res.data.message.totals2); 
+                       _this.historyData = res.data.message.data
+                       _this.totals = res.data.message.totals
+                       _this.pageSize = res.data.message.pageSize
                        _this.loading = false;
                     })
                     .catch(function(err) {
                         _this.$Notice.error({ title: '错误' });
                     })
           },
-          changepage(page) {
-          	// this.fangyuaData(page)
+          lookke(e){
+               let _this = this;
+               axios({
+                    method: 'post',
+                    url: '/api/warnread?id=' + e,
+                    headers: { Authorization: 'Bearer ' + Cookies.set('keya') }
+                })
+                .then(function(res) {
+                   console.log(res)
+                })
+                .catch(function(err) {
+                    _this.$Notice.error({ title: '错误' });
+                })
           },
+          changepage(page) {
+          	this.fangyuaData(page)
+          },
+          // onRefresList(){
+          //   this.fangyuaData(1)
+          // }
         },
         watch:{
            RadioGroups:{
               handler: function (val, oldVal){
-               // this.fangyuaData(1)
+               this.fangyuaData(1)
               },
               deep: true
            } 

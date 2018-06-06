@@ -10,6 +10,7 @@
 
 <template>
   <div style="padding-bottom: 200px">
+  <pre>{{formInline}}</pre>
   	<Form ref="formInline" :model="formInline" :rules="ruleInline" label-position="right" :label-width="100">
         <FormItem class="inndew" prop="city" label="收信人">
              <Select v-model="formInline.city" multiple clearable filterable>
@@ -31,7 +32,7 @@
         </FormItem>
 
         <FormItem>
-            <Button type="primary" @click="handleSubmit('formInline')">提交</Button>
+             <Button type="primary" @click="handleSubmit('formInline')" :loading="loading">提交</Button>
              <Button type="ghost" @click="handleReset('formInline')" style="margin-left: 8px">清空</Button>
         </FormItem>
     </Form>
@@ -47,11 +48,12 @@ export default {
         data () {
             return {
                 formInline: {
-                    city: [],
-                    date: '',
-                    desc: '',
+                    city: [], //收信人
+                    date: '', //定时发送
+                    desc: '', //内容
                 },
                 cityList: [],
+                loading:false,
                 ruleInline: {
                     city: [
                         { required: true, type: 'array', message: '填写收信人', trigger: 'change' }
@@ -95,7 +97,29 @@ export default {
           },
             handleSubmit(name) {
                 this.$refs[name].validate((valid) => {
-                    console.log(valid)
+                     if (valid) {
+                       let _this = this;
+                     _this.loading = true,
+                      axios({
+                              method: 'post',
+                              url: '/api/warnget',
+                              headers: { Authorization: 'Bearer ' + Cookies.set('keya') },
+                              data:{
+                                jo:_this.formInline
+                              }
+                          })
+                          .then(function(res) {
+                               _this.$Message.success('添加成功');
+                               _this.loading = false
+                               // _this.$emit('refreshList');
+                               _this.$refs[name].resetFields();
+                               _this.formInline.city = []
+                               console.log(res)
+                          })
+                          .catch(function(err) {
+                              _this.$Notice.error({ title: '人员错误' });
+                          })
+                     }
                 })
             },
             handleReset (name) {

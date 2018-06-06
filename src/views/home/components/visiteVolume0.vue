@@ -39,11 +39,11 @@
        <Col :xs="24" :sm="24" :md="24" :lg="24" class="searchFoleb">
         <Card style="margin-bottom:10px">
             <Form :model="searchFole" label-position="right" :label-width="100" inline>
-                <FormItem label="部门/人员" style="margin-bottom:0">
+                <FormItem label="部门/人员" style="margin:3px 0">
                  <Cascader class="caca" :data="followupdata" v-model="searchFole.cacaDer" placeholder="部门/人员" change-on-select></Cascader>
                 </FormItem>
 
-                <FormItem label="时间" style="margin-bottom:0">
+                <FormItem label="时间" style="margin:3px 0">
                  <DatePicker v-model="searchFole.time" :options="options2" class="cacas" type="daterange" placement="bottom-end" placeholder="时间"></DatePicker>
                 </FormItem>
              </Form>

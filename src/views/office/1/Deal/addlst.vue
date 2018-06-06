@@ -247,7 +247,7 @@
                          <span slot="append">%</span>
                        </Input>
                     </Col>
-                    <Col style='padding: 2px 2px 2px 0;' :xs="5" :sm="4" :md="4" :lg="4">
+                    <Col style='display: none' :xs="5" :sm="4" :md="4" :lg="4">
                        <Button @click="data.introduce.vlu_6 = !data.introduce.vlu_6" 
                        :type="data.introduce.vlu_6?'error':'dashed'" 
                        size="small" style="margin-left:3px">{{data.introduce.vlu_6?'隐藏':'已隐藏'}}</Button>
@@ -292,7 +292,7 @@
                          <span slot="append">%</span>
                        </Input>
                     </Col>
-                    <Col style='padding: 2px 2px 2px 0;' :xs="5" :sm="4" :md="4" :lg="4">
+                    <Col style='display: none' :xs="5" :sm="4" :md="4" :lg="4">
                        <Button @click="data.Property.vlu_6 = !data.Property.vlu_6" 
                        :type="data.Property.vlu_6?'error':'dashed'" 
                        size="small" style="margin-left:3px">{{data.Property.vlu_6?'隐藏':'已隐藏'}}</Button>
@@ -372,7 +372,7 @@
                          <span slot="append">%</span>
                        </Input>
                     </Col>
-                    <Col style='padding: 2px 2px 2px 0;' :xs="5" :sm="4" :md="4" :lg="4">
+                    <Col style='display: none' :xs="5" :sm="4" :md="4" :lg="4">
                        <Button @click="data.Rental.vlu_6 = !data.Rental.vlu_6" 
                        :type="data.Rental.vlu_6?'error':'dashed'" 
                        size="small" style="margin-left:3px">{{data.Rental.vlu_6?'隐藏':'已隐藏'}}</Button>

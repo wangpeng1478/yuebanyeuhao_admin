@@ -98,7 +98,7 @@ export const otherRouter = {
 export const appRouter = [
     {
         path: '/overview',
-        icon: 'clipboard',
+        icon: 'ios-home',
         name: 'overview',
         title: '工作概览',
         component: Main,
@@ -110,7 +110,7 @@ export const appRouter = [
     },
     {
         path: '/building',
-        icon: 'clipboard',
+        icon: 'ios-keypad',
         name: 'building',
         title: '楼盘字典',
         component: Main,
@@ -121,7 +121,7 @@ export const appRouter = [
     },
     {
         path: '/house',
-        icon: 'clipboard',
+        icon: 'ios-keypad-outline',
         name: 'house',
         title: '房源管理',
         component: Main,
@@ -133,7 +133,7 @@ export const appRouter = [
     },
     {
         path: '/client',
-        icon: 'clipboard',
+        icon: 'person',
         name: 'client',
         title: '客户管理',
         component: Main,
@@ -146,7 +146,7 @@ export const appRouter = [
     },
     {
         path: '/access',
-        icon: 'key',
+        icon: 'person-stalker',
         name: 'access',
         title: '客户预约',
         component: Main,

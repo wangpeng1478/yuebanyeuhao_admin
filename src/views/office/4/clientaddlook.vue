@@ -416,7 +416,7 @@
                               <Radio label="长期维护">长期维护</Radio>
                             </RadioGroup>
                       </FormItem>
-                      <FormItem label="提醒">
+                      <FormItem label="提醒" v-if="followUp.status !=='长期维护'">
                         <Alert show-icon style="max-width:500px;" v-if="followUp.status=='有效'">
                            有效(正在操作,需求明确),系统跳窗提醒,跟进时间为48
                            小时一次,若无跟进24小时后再次跳窗提醒,若当日24点前还是

@@ -87,7 +87,7 @@ export default {
                       return h('div',{
                            class:"addloussdas"
                       }, [
-                         h('ul', params.row.children.map(item => {
+                          h('ul', params.row.children.map(item => {
                                 return h('li',[
                                   h('Tag', item.value)
                                 ])
