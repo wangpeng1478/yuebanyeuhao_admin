@@ -237,7 +237,7 @@
            </FormItem>
           </Col>
         </Row>
-        <Row>
+        <Row style="display: none;">
           <Col :xs="24" :sm="24" :md="24" :lg="24">
            <FormItem label="办公类型" class="ivu-form-item-required">
              <RadioGroup v-model="loupnAdd.genre" type="button" @on-change="loupnAdd.genre2 = ''">
@@ -248,7 +248,7 @@
           </Col>
         </Row>
 
-        <Row v-if='loupnAdd.genre !== "普通办公"'>
+        <Row v-if='loupnAdd.genre !== "普通办公"' style="display: none;">
          <Col :xs="12" :sm="12" :md="12" :lg="6">
            <FormItem label="园区品牌">
               <Input v-model="loupnAdd.genre2"></Input>
@@ -256,7 +256,7 @@
           </Col>
         </Row>
 
-          <Row>
+          <Row  style="display: none;">
             <Col :xs="24" :sm="24" :md="18" :lg="13">
                <FormItem label="楼盘简介">
                  <Input v-model="loupnAdd.introduce" type="textarea" :rows="4"></Input>
@@ -267,7 +267,7 @@
 
       </Card>
 
-      <Card style="margin-top:15px;">
+      <Card style="margin-top:15px; display: none;">
          <p slot="title">详细信息</p>
           <Row>
             <Col :xs="24" :sm="24" :md="24" :lg="6">

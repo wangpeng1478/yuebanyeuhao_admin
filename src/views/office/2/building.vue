@@ -126,7 +126,7 @@
                     clearable
                     remote
                     :remote-method="remoteMethod"
-                    placeholder = '请搜索楼盘'
+                    :placeholder = "sesongs"
                     :loading="loadingse">
                       <Option v-for="(option, index) in optionsName" :value="option.value" :key="index">{{option.label}}</Option>
                   </Select>
@@ -252,7 +252,7 @@
         </div>
         </div>
       </div>
-      <Page class="cf pages" :total="totals" :page-size="pageSize"  @on-change="changepage" show-total show-elevator></Page>
+      <Page class="cf pages" :current="current" :total="totals" :page-size="pageSize"  @on-change="changepage" show-total show-elevator></Page>
       </div>
     </Card>
     <Card class="padd10" style="min-height: 500px;text-align:center" v-else>
@@ -276,7 +276,9 @@ export default {
 	        return {
             totals: 50, //总页数
             pageSize: 20, //每页显示
+            current:1,
             spinShow: true,
+            sesongs:'请搜索楼盘',
             screense:false,// true 有搜索条件 false 无搜索条件
 	          screens:{
                name:'',//楼盘名称
@@ -320,7 +322,11 @@ export default {
                 }], //商圈地区
               cityList: [],
               metros: [], //地铁
-              gentype: [{
+              gentype: [
+                    {
+                        value: '全部',
+                        label: '全部'
+                    },{
                         value: '新增',
                         label: '新增'
                     },
@@ -603,7 +609,35 @@ export default {
               _this.$Notice.error({title: '人员错误'});
           })
           
-          this.buildingls(1); //类表
+          
+          
+          if (Cookies.getJSON('screense') ==0 || Cookies.getJSON('screense') == undefined ) {
+             this.buildingls(1); //类表
+          }else{
+             let se = Cookies.getJSON('screense')
+             let page = Cookies.getJSON('page1')
+             this.sesongs = se.name
+             this.screens.regions = se.regions
+             this.screens.ascription = se.ascription
+             this.screens.FollowUp = se.FollowUp
+             this.screens.metro = se.metro
+             this.screens.Renovation = se.Renovation
+             this.screens.rent = se.rent
+             this.screens.minaji = se.minaji
+             this.screens.zongshojia = se.zongshojia
+             this.screens.yesNO = se.yesNO
+             this.screens.id = se.id
+
+             if (page == undefined) {
+               this.current = 1
+               this.buildinglsew(1)
+             }else{
+               this.current = page
+               this.buildinglsew(page); //类表
+             }
+             console.log(page)
+             
+          }
         },
         methods:{
           buildingls(e){
@@ -628,7 +662,7 @@ export default {
           },
           buildinglse(e){
             let _this = this;
-            console.log(_this.screens)
+            // console.log(_this.screens)
              _this.spinShow = true;
             axios({
                 method:'post',
@@ -636,6 +670,29 @@ export default {
                 headers:{Authorization:'Bearer '+Cookies.set('keya')},
                 data:{
                   jo:_this.screens
+                }
+             })
+            .then(function (res) {
+              _this.spinShow = false;
+              _this.officeDta = res.data.message.data;
+              _this.pageSize = res.data.message.pageSize;
+              _this.totals = res.data.message.totals;
+              _this.$Message.success('楼盘数量：'+_this.totals+' 套');
+            })
+            .catch(function (err) {
+                _this.$Notice.error({title: '类表错误'});
+            })
+          },
+          buildinglsew(e){
+            let _this = this;
+            // console.log(_this.screens)
+             _this.spinShow = true;
+            axios({
+                method:'post',
+                url:'/api/louadmin?page='+e,
+                headers:{Authorization:'Bearer '+Cookies.set('keya')},
+                data:{
+                  jo:Cookies.getJSON('screense')
                 }
              })
             .then(function (res) {
@@ -739,10 +796,13 @@ export default {
               }
             },
             changepage(page) {
+              var ele = document.getElementById('singlepagecon');
+              ele.scrollTop = 0;
               //翻页
               var _this = this;
               _this.spinShow = true;
               _this.toogless = -1;//防止分页加载index
+              Cookies.set('page1', page); //权限
 
               if(_this.screense) {
                 console.log('%c有条件','color:red')
@@ -776,7 +836,9 @@ export default {
               // console.log(this.screens)
               _this.toogless = -1;//防止分页加载index
               _this.screense = true; //有搜索条件
+              Cookies.set('screense', _this.screens); //权限
               _this.spinShow = true; //table looing
+              
               //搜索
               axios({
                method: 'post',
@@ -805,6 +867,8 @@ export default {
               let _this = this;
               _this.buildingls(1); //类表
               _this.screense = false; //无搜索条件
+               Cookies.set('screense', 0); 
+              _this.sesongs = '请搜索楼盘'
               _this.toogless = -1;//防止分页加载index
               // _this.spinShow = true; //table looing
               this.screens = {

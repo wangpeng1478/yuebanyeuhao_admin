@@ -1,15 +1,13 @@
 <style lang="less">
  .house{
-  .sere{
-    .ivu-form-item{
-      margin-bottom: 8px;
-    }
-  }
   .selectsNmae{
     .ivu-select-not-found{
       display:none
     }
    }
+    .ivu-table .demo-table-info-row td{
+        background-color: #80ccff;
+    }
   .input-group {
     position: relative;
     display: table;
@@ -130,7 +128,7 @@
                   clearable
                   remote
                   :remote-method="remoteMethod"
-                  placeholder = '请搜索楼盘'
+                  :placeholder = "sesongs"
                   :loading="loadingse">
                       <Option v-for="(option, index) in optionsName" :value="option.value" :key="index">{{option.label}}</Option>
                   </Select>
@@ -195,7 +193,7 @@
               </FormItem>
           </Col>
           <Col :xs="24" :sm="12" :md="8" :lg="4">
-              <FormItem label="总售价">
+              <FormItem label="出售单价">
               <div class="input-group">
                 <input v-model="screens.zongshojia.min" type="text" maxlength="8">
                 <input v-model="screens.zongshojia.max" type="text" maxlength="8">
@@ -262,9 +260,9 @@
     <Card class="padd10">
     <div class="cf">
      <div class="ovhidese">
-      <Table class='tablese' :loading="loadings" width="100%" :columns="HouseTable" :data="HouseTableData" border highlight-row @on-sort-change="order"></Table>
+      <Table class='tablese' :row-class-name="rowClassName" :loading="loadings" width="100%" :columns="HouseTable" :data="HouseTableData" border highlight-row @on-sort-change="order"></Table>
         <div>
-          <Page class="cf pages" :total="totals" :page-size="pageSize"  @on-change="changepage" show-total show-elevator></Page>
+          <Page class="cf pages" :current="current" :total="totals" :page-size="pageSize"  @on-change="changepage" show-total show-elevator></Page>
         </div>
       </div>
       </div>
@@ -284,7 +282,9 @@ export default {
 	        return {
             totals: 50, //总页数
             pageSize: 20, //每页显示
+            current:1,
             spinShow: true,
+            sesongs:'请搜索楼盘',
             modal2r: true,
             screense:false,// true 有搜索条件 false 无搜索条件
              options2: {
@@ -361,7 +361,7 @@ export default {
                name:'',//房源名称
                regions:[],//所在区域
                ascription:'',//归属人
-               FollowUp:'', //跟进类型
+               FollowUp:'有效', //跟进类型
                metro:'', //最近地铁
                Renovation:'', //装修情况
                rent:{
@@ -391,7 +391,11 @@ export default {
               region: [], //商圈地区
               cityList: [],
               metros: [], //地铁
-              gentype: [{
+              gentype: [
+                    {
+                        value: '全部',
+                        label: '全部'
+                    },{
                         value: '新增',
                         label: '新增'
                     },
@@ -537,7 +541,7 @@ export default {
                         sortable: 'custom',
                         key: 'mian',
                         render: (h, params) =>{
-                          const dis = params.row.mian == null? '0' : params.row.mian;
+                          // const dis = params.row.mian == null? '0' : params.row.mian;
                           return h('div', [
                                 h('div', {}, params.row.mian+'m²'),
                             ]);
@@ -550,23 +554,44 @@ export default {
                         sortable: 'custom',
                         key: 'price',
                         render: (h, params) =>{
-                          const display = params.row.price[0] == null? 'none' : 'block';
-                          const displays = params.row.price[1] == null || params.row.price[1] == 0? 'none' : 'block';
-
-                          return h('div', [
+                          // const display = isNull(params.row.price[0]) ? 'none' : 'block'; 
+                          // const displays = isNull(params.row.price[1]) || params.row.price[1] == 0? 'none' : 'block';
+                          // console.log(params.row.price[0])
+                          if (params.row.price[0] !==0) {
+                              return h('div', [
                                  h('div', {
                                     style: {
                                         margin: '2px 0',
-                                        display:display
+                                        display:'block'
                                     }
                                  }, params.row.price[0]+'元/m²*天(租)'),
                                  h('div', {
                                     style: {
                                         margin: '2px 0',
-                                        display:displays
+                                        display:'none'
                                     }
                                  }, params.row.price[1]+'元(售)'),
                             ]);
+                          }
+                          if (params.row.price[1] !==0) {
+                              return h('div', [
+                                 h('div', {
+                                    style: {
+                                        margin: '2px 0',
+                                        display:'none'
+                                    }
+                                 }, params.row.price[0]+'元/m²*天(租)'),
+                                 h('div', {
+                                    style: {
+                                        margin: '2px 0',
+                                        display:'block'
+                                    }
+                                 }, params.row.price[1]+'元(售)'),
+                            ]);
+                          }
+
+                          
+
                         }
                     },
                     {
@@ -586,13 +611,17 @@ export default {
                         render: (h, params) => {
                             const row = params.row;
                             //0 未知 1 大 2 小
+                            // console.log(row.yetype)
+                            if (!row.yetype && typeof(row.yetype)!=undefined && row.yetype!=0){ 
+                                return false
+                              }　
                             const color = row.yetype[0] == 0 ? '#666' : row.yetype[0] == 1?'blue':'green';
                             const text = row.yetype[0] == 0 ? '未知' : row.yetype[0] == 1?'大':'小';
-                            const texts = row.yetype[0] == 0 ? '未知' : row.yetype[0] == 1?'大业主':'小业主';
+                            // const texts = row.yetype[0] == 0 ? '未知' : row.yetype[0] == 1?'大业主':'小业主';
                             return h('Poptip', {
                                 props: {
                                     trigger: 'hover',
-                                    title: texts,
+                                    title: row.yetype[1],
                                     content: row.yetype[2],
                                 }
                             }, [
@@ -681,6 +710,9 @@ export default {
                                     },
                                     on: {
                                         click: () => {
+                                          console.log(params.index)
+                                          Cookies.set('params', params.index,{ expires: 0.1 })
+                                           // return false
                                            let query = { deal_id: params.row.id};
                                             this.$router.push({
                                              name: 'houseadd_edit',
@@ -699,6 +731,9 @@ export default {
                                     },
                                     on: {
                                         click: () => {
+                                            console.log(params.index)
+                                            Cookies.set('params', params.index,{ expires: 0.1 })
+                                            // return false
                                             let query = { deal_id: params.row.id};
                                             this.$router.push({
                                              name: 'house_follow',
@@ -789,10 +824,55 @@ export default {
          //默认数据 1
         
 
-        this.showHide(1);
+        // this.showHide(1);
+        if (Cookies.getJSON('screense2') ==0 || Cookies.getJSON('screense2') == undefined ) {
+             this.showHide(1); //类表
+          }else{
+             let se = Cookies.getJSON('screense2')
+             let page = Cookies.getJSON('page2')
+
+             this.sesongs = se.name
+             this.screens.regions = se.regions
+             this.screens.ascription = se.ascription
+             this.screens.FollowUp = se.FollowUp
+             this.screens.metro = se.metro
+             this.screens.Renovation = se.Renovation
+             this.screens.rent = se.rent
+             this.screens.minaji = se.minaji
+             this.screens.zongshojia = se.zongshojia
+             this.screens.yesNO = se.yesNO
+             this.screens.id = se.id
+             this.screens.yesNOimg = se.yesNOimg
+             this.screens.identity = se.identity
+             this.screens.times = se.times
+             this.screens.timese = se.timese
+             this.screens.key = se.key
+             this.screens.order = se.order
+
+             if (page == undefined) {
+               this.current = 1
+               this.showHideseww(1)
+             }else{
+               this.current = page
+               this.showHideseww(page); //类表
+             }
+             console.log(page)
+             
+          }
 
         },
         methods:{
+         rowClassName (row, index) {
+           // console.log(Number(Cookies.set('params')))
+              if (Cookies.set('params') == undefined) {
+                  return '';
+              }else{
+                  if (index == Number(Cookies.set('params'))) {
+                      return 'demo-table-info-row';
+                  }
+              }
+              
+            },
          ajaxName(e){
           let _this = this;
            _this.loading1 = true;
@@ -896,6 +976,30 @@ export default {
              })
             .then(function (res) {
               _this.loadings = false;
+              console.log(res)
+              _this.HouseTableData = res.data.message.data; //列表数据
+              _this.pageSize = res.data.message.pageSize; //每页显示
+              _this.totals = res.data.message.totals; //总数
+              _this.$Message.success('房源数量：'+_this.totals+' 套');
+            })
+             .catch(function (err) {
+                _this.$Notice.error({title: '房源类表错误'});
+             })
+            },
+            showHideseww(e){
+              var _this = this;
+              //房源有条件
+              _this.loadings = true;
+               axios({
+                method:'post',
+                url:'/api/fangadmin2?page='+e,
+                headers:{Authorization:'Bearer '+Cookies.set('keya')},
+                 data:{
+                  jo:Cookies.getJSON('screense2')
+                }
+             })
+            .then(function (res) {
+              _this.loadings = false;
               // console.log(res.data.message)
               _this.HouseTableData = res.data.message.data; //列表数据
               _this.pageSize = res.data.message.pageSize; //每页显示
@@ -918,9 +1022,12 @@ export default {
             },
 
             changepage(page) {
+              var ele = document.getElementById('singlepagecon');
+              ele.scrollTop = 0;
               //翻页
               var _this = this;
               _this.loadings = true;
+              Cookies.set('page2', page); //权限
               if(_this.screense) {
                 // console.log('%c有条件','color:red')
                 _this.showHidese(page);
@@ -948,16 +1055,15 @@ export default {
                //搜索
                _this.showHidese(1);
                // console.log('%c搜索','color:red')
-                Cookies.set('screenss', true);
-                Cookies.set('screens', _this.screens);
+               Cookies.set('screense2', _this.screens); //权限
             },
             reson(){
               //重置
               let _this = this;
-              Cookies.set('screenss', false);
-               Cookies.remove('screens');
+              Cookies.set('screense2', 0); 
               _this.screense = false; //无搜索条件
               _this.showHide(1);
+              _this.sesongs = '请搜索楼盘'
               _this.screens ={
                name:'',//房源名称
                regions:[],//所在区域

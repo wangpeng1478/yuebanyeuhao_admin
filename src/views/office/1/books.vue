@@ -1,10 +1,5 @@
 <style lang="less">
  .books{
-  .sere{
-    .ivu-form-item{
-      margin-bottom: 8px;
-    }
-  }
   .selectsNmae{
     .ivu-select-not-found{
       display:none
@@ -1031,6 +1026,8 @@ export default {
             },
 
             changepage(page) {
+            var ele = document.getElementById('singlepagecon');
+            ele.scrollTop = 0;
               //翻页
               var _this = this;
               _this.loadings = true;

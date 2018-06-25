@@ -118,7 +118,8 @@
             <span>手机上传图片</span>
         </p>
         <div style="text-align:center">
-            <img :src="codesrc">
+ <!--            <img :src="codesrc"> -->
+            <canvas id="qrccode-canvas"></canvas>
             <Alert show-icon>上传完毕后点击 <b>“我已上传完毕”</b> 即可</Alert>
         </div>
         <div slot="footer">
@@ -133,7 +134,9 @@ import $ from 'jquery';
 import axios from 'axios'
 import Cookies from 'js-cookie';
 import Sortable from 'sortablejs';
-
+import qrcode from 'qrcode'
+var QRCode = require('qrcode')
+var canvas = ''
 export default {
     name: 'Uploads',
     props:[
@@ -167,10 +170,6 @@ export default {
                         label: '吸烟室'
                     },
                     {
-                        value: '走廊',
-                        label: '走廊'
-                    },
-                    {
                         value: '书吧',
                         label: '书吧'
                     },
@@ -183,13 +182,42 @@ export default {
                         label: '办公室内景'
                     },
                     {
-                        value: '平面图',
-                        label: '平面图'
+                        value: '外观',
+                        label: '外观'
+                    },
+                    {
+                        value: '入口',
+                        label: '入口'
+                    },
+                    {
+                        value: '大堂',
+                        label: '大堂'
+                    },
+                    {
+                        value: '走廊',
+                        label: '走廊'
+                    },
+                    {
+                        value: '电梯间',
+                        label: '电梯间'
+                    },
+                    {
+                        value: '商业配套',
+                        label: '商业配套'
+                    },
+                    {
+                        value: '景观',
+                        label: '景观'
+                    },
+                    {
+                        value: '共享办公专用',
+                        label: '共享办公专用'
                     },
                     {
                         value: '其他',
                         label: '其他'
                     }
+                    
                 ],
          actionUrl:'/api/imgup?master='+Cookies.set('user'),
          keys:{},
@@ -208,7 +236,7 @@ export default {
       this.keys = {
          Authorization:'Bearer '+Cookies.set('keya')
       };
-      this.codesrc = 'http://pan.baidu.com/share/qrcode?w=250&h=250&url=http://47.98.155.165/admin/upload.html?data='+this.webid+','+this.master
+      this.qrcode();
       // console.log({Authorization:'Bearer '+Cookies.set('keya')})
         let _this = this;
         let todoList = document.getElementById('todoList');
@@ -243,7 +271,7 @@ export default {
                // console.log(res.data.message)
                for (var i = 0; i < res.data.message.length; i++) {
                    _this.img.push({
-                      url:'http://47.98.155.165'+res.data.message[i],
+                      url:'http://www.yuebanyuehao.com'+res.data.message[i],
                       type:'',
                       eq:0
                    })
@@ -265,7 +293,7 @@ export default {
          let _this = this;
          let index = _this.img.length;
          _this.img.push({
-            url:'http://47.98.155.165'+response.message,
+            url:'http://www.yuebanyuehao.com'+response.message,
             type:'',
             eq:index
          })
@@ -326,7 +354,17 @@ export default {
        clickCard(e){
             this.clickCardsimg = e;
             this.clickCards = true;
-          },
+       },
+        qrcode () {
+          let url = 'http://www.yuebanyuehao.com/admin/upload.html?data='+this.webid+','+this.master
+          QRCode.toCanvas(document.getElementById('qrccode-canvas'), url, (error) => {
+            if (error) {
+              console.log(error)
+            } else {
+              console.log('ok')
+            }
+          })
+       }  
     }
 };
 </script>

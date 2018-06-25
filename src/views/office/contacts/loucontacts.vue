@@ -56,7 +56,7 @@
         <Row>
            <Col :xs="24" :sm="24" :md="24" :lg="24">
              <FormItem label="类型">
-                  <Select v-model="moldx.types" @on-change="typechang" disabled>
+                  <Select v-model="moldx.types" @on-change="typechang">
                       <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                   </Select>
              </FormItem>  
@@ -554,7 +554,7 @@ export default {
            onSuccess(response, file, fileList){
               // console.log('文件上传成功')
               console.log(response.message)
-              this.moldx.cardz = 'http://47.98.155.165'+response.message
+              this.moldx.cardz = 'http://www.yuebanyuehao.com'+response.message
           },
           onError(error, file, fileList){
                // console.log('文件上传失败')
@@ -566,7 +566,7 @@ export default {
          onSuccessa(response, file, fileList){
               // console.log('文件上传成功')
               console.log(response.message)
-              this.moldx.cardf = 'http://47.98.155.165'+response.message
+              this.moldx.cardf = 'http://www.yuebanyuehao.com'+response.message
           },
           onErrora(error, file, fileList){
                // console.log('文件上传失败')

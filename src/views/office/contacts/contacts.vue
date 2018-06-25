@@ -56,7 +56,7 @@
         <Row>
            <Col :xs="24" :sm="24" :md="24" :lg="24">
              <FormItem label="类型">
-                  <Select v-model="moldx.types" @on-change="typechang" disabled>
+                  <Select v-model="moldx.types" @on-change="typechang">
                       <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                   </Select>
              </FormItem>  
@@ -193,7 +193,27 @@
                   </Upload>
                </FormItem>  
              </Col>
-
+          </Row>
+          <Row>
+            <Col>
+              <FormItem>
+                  <!-- <Button type="primary" icon="iphone" @click="upuoks">手机上传名片</Button> -->
+                  <p>{{webid}}</p>
+                <Modal v-model="upphone" width="400" :closable="false" :mask-closable="false">
+                    <p slot="header" style="text-align:center">
+                        <Icon type="iphone"></Icon>
+                        <span>手机上传名片</span>
+                    </p>
+                    <div style="text-align:center">
+                        <canvas id="qrccode-canvass"></canvas>
+                        <Alert show-icon>上传完毕后点击 <b>“我已上传完毕”</b> 即可</Alert>
+                    </div>
+                    <div slot="footer">
+                        <Button type="primary" :loading="modal_loading" @click="uppones" long>“我已上传完毕”</Button>
+                    </div>
+                </Modal>
+              </FormItem>
+            </Col>
           </Row>
 </Col>
 
@@ -337,7 +357,9 @@
 <script>
 import axios from 'axios'
 import Cookies from 'js-cookie';
-
+import qrcode from 'qrcode'
+var QRCode = require('qrcode')
+var canvas = ''
 export default {
     name: 'contacts',
     props:[
@@ -346,6 +368,10 @@ export default {
       data () {
           return {
              keys:{},
+             webid:'',
+             master:Cookies.set('user'),
+             upphone:false,
+             modal_loading:false,
              cityList:[{
                         value: '楼盘联系人',
                         label: '楼盘联系人'
@@ -481,6 +507,7 @@ export default {
           }
         },
         mounted(){
+          
           // console.log(this.typedata)
           this.moldx.types = this.typedata
             this.keys = {
@@ -488,6 +515,44 @@ export default {
             };
         },
         methods:{
+          qrcode () {
+            let url = 'http://www.yuebanyuehao.com/admin/upload2.html?data='+this.webid+','+this.master
+            QRCode.toCanvas(document.getElementById('qrccode-canvass'), url, (error) => {
+              if (error) {
+                console.log(error)
+              } else {
+                console.log('ok')
+              }
+            })
+         }, 
+         upuoks(){
+          this.webid = Math.random().toString(16).substring(2)
+          this.qrcode();
+          this.upphone = true
+         },
+          uppones(){
+        let _this = this;
+        _this.modal_loading = true
+          axios({
+                method:'post',
+                url:'/api/webupend',
+                headers:{Authorization:'Bearer '+Cookies.set('keya')},
+                data:{
+                  webid:_this.webid,
+                  master:_this.master
+                }
+             })
+            .then(function (res) {
+                //console.log(res.data.message)
+                // _this.moldx.cardz = 'http://47.98.155.165'+
+                // _this.moldx.cardf = 'http://47.98.155.165'+
+                 _this.modal_loading = false
+                 _this.upphone = false
+            })
+            .catch(function (err) {
+                _this.$Notice.error({title: '错误'});
+            })
+       },
            clickaddp(){
              this.moldx.phonenumber.add.push({
                    name:''
@@ -549,7 +614,7 @@ export default {
            onSuccess(response, file, fileList){
               // console.log('文件上传成功')
               console.log(response.message)
-              this.moldx.cardz = 'http://47.98.155.165'+response.message
+              this.moldx.cardz = 'http://www.yuebanyuehao.com'+response.message
           },
           onError(error, file, fileList){
                // console.log('文件上传失败')
@@ -561,7 +626,7 @@ export default {
          onSuccessa(response, file, fileList){
               // console.log('文件上传成功')
               console.log(response.message)
-              this.moldx.cardf = 'http://47.98.155.165'+response.message
+              this.moldx.cardf = 'http://www.yuebanyuehao.com'+response.message
           },
           onErrora(error, file, fileList){
                // console.log('文件上传失败')

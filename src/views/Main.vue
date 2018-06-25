@@ -63,22 +63,29 @@
                                     系统管理
                                 </template>
                                 <MenuGroup title="管理">
-                                    <MenuItem name="0"><Icon type="person-add"></Icon> 用户管理 </MenuItem>
-                                    <MenuItem name="1"><Icon type="android-wifi"></Icon> IP管理 </MenuItem>
+                                    <MenuItem v-if="auth.user01 || auth.user02" name="0"><Icon type="person-add"></Icon> 用户管理 </MenuItem>
+                                    <MenuItem v-if="auth.syst01" name="1"><Icon type="android-wifi"></Icon> IP管理 </MenuItem>
                                 </MenuGroup>
                                 <MenuGroup title="删除">
-                                    <MenuItem name="2"><Icon type="ios-trash-outline"></Icon> 楼盘删除</MenuItem>
-                                    <MenuItem name="3"><Icon type="ios-trash"></Icon> 房源删除</MenuItem>
+                                    <MenuItem v-if="auth.syst04" name="2"><Icon type="ios-trash-outline"></Icon> 楼盘删除</MenuItem>
+                                    <MenuItem v-if="auth.syst03" name="3"><Icon type="ios-trash"></Icon> 房源删除</MenuItem>
                                 </MenuGroup>
                                  <MenuGroup title="记录">
-                                    <MenuItem name="4"><Icon type="ios-cog-outline"></Icon> 图片记录</MenuItem>
-                                    <MenuItem name="5"><Icon type="ios-cog"></Icon> 跟进记录</MenuItem>
+                                    <MenuItem v-if="auth.syst02" name="4"><Icon type="ios-cog-outline"></Icon> 图片记录</MenuItem>
+                                    <MenuItem v-if="auth.syst08" name="5"><Icon type="ios-cog"></Icon> 跟进记录</MenuItem>
+                                    <MenuItem v-if="auth.user01" name="9"><Icon type="gear-a"></Icon> 操作日志</MenuItem>
+                                    <MenuItem name="10"><Icon type="ios-time-outline"></Icon> 房源到期日期</MenuItem>
+                                    <MenuItem name="11"><Icon type="ios-time-outline"></Icon> 客户到期日期</MenuItem>
                                 </MenuGroup>
                                 <MenuGroup title="其他">
                                     <!-- <MenuItem name="6"><Icon type="ios-toggle-outline"></Icon> 房源转换</MenuItem> -->
                                     <MenuItem name="6"><Icon type="ios-toggle-outline"></Icon> 添加区域/商圈</MenuItem>
                                     <MenuItem name="7"><Icon type="ios-toggle-outline"></Icon> 添加地铁</MenuItem>
                                     <MenuItem name="8"><Icon type="ios-toggle-outline"></Icon> 客户提醒间隔</MenuItem>
+                                </MenuGroup>
+                                <MenuGroup title="新闻" v-if="newsrq">
+                                    <MenuItem name="88"><Icon type="ios-list-outline"></Icon>
+                                    <a target="_blank" href="http://www.yuebanyuehao.com/servicing_shop/public/index.php?s=admin/Auxi/news">发布新闻</a></MenuItem>
                                 </MenuGroup>
                             </Submenu>
                         </Menu>
@@ -107,12 +114,13 @@
                 <tags-page-opened :pageTagsList="pageTagsList"></tags-page-opened>
             </div>
         </div>
-        <div class="single-page-con" :style="{left: shrink?'60px':'200px'}">
+        <div class="single-page-con" id="singlepagecon" :style="{left: shrink?'60px':'200px'}">
             <div class="single-page">
                 <keep-alive :include="cachePage">
                     <router-view></router-view>
                 </keep-alive>
             </div>
+            <BackTop></BackTop>
         </div>
 
          <Modal v-model="editPasswordModal" :closable='false' :mask-closable=false :width="500">
@@ -168,6 +176,7 @@
             };
             return {
                 shrink: false,
+                newsrq: false, //新闻权限
                 editPasswordModal: false, // 修改密码模态框显示
                 savePassLoading: false,
                 oldPassError: '',
@@ -258,14 +267,43 @@
             toggleClick () {
                 this.shrink = !this.shrink;
             },
-             cancelEditPass () {
+            cancelEditPass () {
               this.editPasswordModal = false;
             },
             saveEditPass () {
                 this.$refs['editPasswordForm'].validate((valid) => {
                     if (valid) {
                         this.savePassLoading = true;
-                        // you can write ajax request here
+                        // this.editPasswordModal = true;
+                        let _this = this;
+                        axios({
+                                method: 'post',
+                                url: '/api/modup1',
+                                headers: { Authorization: 'Bearer ' + Cookies.set('keya') },
+                                data:{"jo":{
+                                  name:Cookies.set('user'),
+                                  pass1:_this.editPasswordForm.oldPass,
+                                  pass2:_this.editPasswordForm.rePass,
+                                }}
+                            })
+                            .then(function(res) {
+                                
+                                console.log(res)
+                                if (res.data.statusx == 202) {
+                                    _this.savePassLoading = false;
+                                    _this.$Message.error(res.data.message);
+                                }else{
+                                    _this.$Message.info('修改成功');
+                                    _this.savePassLoading = false;
+                                    _this.editPasswordModal = true;
+                                    //tui
+                                    _this.handleClickUserDropdown('loginout')
+                                    // location.reload();
+                                }
+                            })
+                            .catch(function(err) {
+                                _this.$Notice.error({ title: '错误' });
+                            })
                     }
                 });
             },
@@ -274,7 +312,7 @@
                     // util.openNewPage(this, 'ownspace_index');
                     // this.$router.push({
                     //     name: 'ownspace_index'
-                    // });
+                    // })
                       this.editPasswordModal = true;
                 } else if (name === 'loginout') {
                     this.$store.commit('logout', this);
@@ -284,7 +322,7 @@
                     });
                 }
             },
-            checkTag (name) {
+            checkTag (name){
                 let openpageHasTag = this.pageTagsList.some(item => {
                     if (item.name === name) {
                         return true;
@@ -321,7 +359,7 @@
             },
             handleClickUserDropdownse(e){
                 if (e==0) {
-                    if (this.auth.user01 || auth.user02) {
+                    if (this.auth.user01 || this.auth.user02) {
                          this.$router.push({
                           name: 'user_admin'
                          })
@@ -394,6 +432,18 @@
                     this.$router.push({
                       name: 'alterna_tion'
                     })
+                }else if(e == 9){
+                    this.$router.push({
+                      name: 'rizhis'
+                    })
+                }else if(e == 10){
+                    this.$router.push({
+                      name: 'daoqi'
+                    })
+                }else if(e == 11){
+                    this.$router.push({
+                      name: 'kehudaoqi'
+                    })
                 }
             }
         },
@@ -415,6 +465,9 @@
             this.init();
             this.accesse();
             this.forms = localStorages.getStorage('forms');
+            if(Cookies.set('user') == "admin" || Cookies.set('user') == "房何进") {
+                this.newsrq = true
+            }
         },
         created () {
             // 显示打开的页面的列表

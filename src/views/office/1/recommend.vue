@@ -325,7 +325,7 @@
         .img {
             float: right;
             height: 327px;
-            background: transparent url(http://47.98.155.165/image/vueAdmin/AB2.png) center center no-repeat;
+            background: transparent url(http://www.yuebanyuehao.com/image/vueAdmin/AB2.png) center center no-repeat;
         }
     }
     th {
@@ -409,12 +409,12 @@
             <Alert show-icon closable>请仔细核对报告中展示的信息，如信息不全或错误直接点击页面进行修改</Alert>
             <div id="pdfDom">
                 <div class="A4 A1">
-                    <img src="http://47.98.155.165/image/vueAdmin/asf.jpg">
+                    <img src="http://www.yuebanyuehao.com/image/vueAdmin/asf.jpg">
                 </div>
                 <!-- AB  -->
                 <div class="A4 AB" v-for="(n,index) in datas.add" :key="n.length">
                     <div class="navtitle">
-                        <img src="http://47.98.155.165/image/vueAdmin/logo.svg" alt="德御logo">
+                        <img src="http://www.yuebanyuehao.com/image/vueAdmin/logo.svg" alt="德御logo">
                         <div class="red">{{n.lnaem}}</div>
                     </div>
                     <!-- eq -->
@@ -555,7 +555,7 @@
                                 </tr>
                                 <tr>
                                     <th>
-                                        <input maxlength="80" class="inputse" type="text" value="定车位">
+                                        <input maxlength="80" class="inputse" type="text" value="停车位">
                                     </th>
                                     <td class='hide1'>
                                         <input maxlength="80" class="inputse" type="text" v-model="n.space">
@@ -638,8 +638,8 @@
                 <!-- AB  -->
                 <div class="A4 A4LL layer_notice">
                     <div class="navtitles">
-                        <img class="m1" src="http://47.98.155.165/image/vueAdmin/logo.svg" alt="德御logo">
-                        <img class="m2" src="http://47.98.155.165/image/vueAdmin/logoy.png" alt="悦办越好">
+                        <img class="m1" src="http://www.yuebanyuehao.com/image/vueAdmin/logo.svg" alt="德御logo">
+                        <img class="m2" src="http://www.yuebanyuehao.com/image/vueAdmin/logoy.png" alt="悦办越好">
                     </div>
                     <div class="connt2">
                         <div class="wi55 tetx">
@@ -713,7 +713,8 @@
                         <span>分享到手机</span>
                     </p>
                     <div style="text-align:center">
-                        <img :src="WXsouimg">
+                        <!-- <img :src="WXsouimg"> -->
+                        <canvas id="qrccode-canvas"></canvas>
                     </div>
                     <div slot="footer" style="text-align:center">
                         打开微信或浏览器，点击底部的“发现”，使用“扫一扫”即可
@@ -725,7 +726,7 @@
                         <span>选址推荐书</span>
                     </p>
                     <div style="text-align:center">
-                        <Alert>点击 <b><Icon type="arrow-down-c"></Icon></b> 下载pdf</Alert>
+                        <Alert>点击 <b><Icon type="arrow-down-c"></Icon></b> <a :href="pdfsrc" target="_blank">下载pdf</a></Alert>
                         <iframe class="embedpdf" :src="pdfsrc"></iframe>
                     </div>
                 </Modal>
@@ -738,7 +739,9 @@
 <script>
 import axios from 'axios'
 import Cookies from 'js-cookie';
-
+import qrcode from 'qrcode'
+var QRCode = require('qrcode')
+var canvas = ''
 export default {
     name: 'recommend',
     data() {
@@ -768,9 +771,9 @@ export default {
               //      id:100,
               //      lnaem:'写字楼名称',
               //      src:'https://restapi.amap.com/v3/staticmap?key=31e75a14b4666b3a920c6e9ea089f1b5&s=rsx&platform=WXJS&appname=31e75a14b4666b3a920c6e9ea089f1b5&sdkversion=1.2.0&logversion=2.0&location=121.473657,31.230378&zoom=15&size=308*308&scale=1', //img
-              //      srcimg1:'http://47.98.155.165/image/vueAdmin/A4L_a3.jpg',
-              //      srcimg2:'http://47.98.155.165/image/vueAdmin/A4L_a3.jpg',
-              //      srcimg3:'http://47.98.155.165/image/vueAdmin/A4L_a3.jpg',
+              //      srcimg1:'http://www.yuebanyuehao.com/image/vueAdmin/A4L_a3.jpg',
+              //      srcimg2:'http://www.yuebanyuehao.com/image/vueAdmin/A4L_a3.jpg',
+              //      srcimg3:'http://www.yuebanyuehao.com/image/vueAdmin/A4L_a3.jpg',
               //      img:[
               //        {
               //          url:'http://www.yuebanyuehao.com/servicing_shop/public/uploadsx/imgzx/loupan59f8faf338474/5a0119d6eda6d.jpg'
@@ -834,9 +837,9 @@ export default {
               //      id:100,
               //      lnaem:'写字楼名称',
               //      src:'https://restapi.amap.com/v3/staticmap?key=31e75a14b4666b3a920c6e9ea089f1b5&s=rsx&platform=WXJS&appname=31e75a14b4666b3a920c6e9ea089f1b5&sdkversion=1.2.0&logversion=2.0&location=121.473657,31.230378&zoom=15&size=308*308&scale=1', //img
-              //      srcimg1:'http://47.98.155.165/image/vueAdmin/A4L_a3.jpg',
-              //      srcimg2:'http://47.98.155.165/image/vueAdmin/A4L_a3.jpg',
-              //      srcimg3:'http://47.98.155.165/image/vueAdmin/A4L_a3.jpg',
+              //      srcimg1:'http://www.yuebanyuehao.com/image/vueAdmin/A4L_a3.jpg',
+              //      srcimg2:'http://www.yuebanyuehao.com/image/vueAdmin/A4L_a3.jpg',
+              //      srcimg3:'http://www.yuebanyuehao.com/image/vueAdmin/A4L_a3.jpg',
               //      img:[
               //        {
               //          url:'http://www.yuebanyuehao.com/servicing_shop/public/uploadsx/imgzx/loupan59f8faf338474/5a0119d6eda6d.jpg'
@@ -1040,8 +1043,9 @@ export default {
                     _this.loading3 = false
                    }else if(e ==3){
                     _this.WXsou = true;
-                    let url = 'http://47.98.155.165/admin/pdf/web/viewer.html?file='+res.data.message[2]
-                    _this.WXsouimg = 'http://pan.baidu.com/share/qrcode?w=250&h=250&url='+url
+                    let url = 'http://www.yuebanyuehao.com/admin/pdf/web/viewer.html?file='+res.data.message[2]
+                     console.log(url)
+                    _this.qrcode(url)
                     _this.loading1 = false
                    }
                 })
@@ -1049,6 +1053,15 @@ export default {
                     _this.$Notice.error({ title: '失败' });
                 })
         },
+        qrcode (url) {
+          QRCode.toCanvas(document.getElementById('qrccode-canvas'), url, (error) => {
+            if (error) {
+              console.log(error)
+            } else {
+              console.log('ok')
+            }
+          })
+       },  
         downloadse(e) {
             let _this = this;
             _this.$Notice.warning({

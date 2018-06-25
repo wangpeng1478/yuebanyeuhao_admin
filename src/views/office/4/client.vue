@@ -1,6 +1,11 @@
 
 <style lang="less">
  .client{
+  .demotableinforow{
+    .paddse{
+      background:#c1e6ff;
+    }
+  }
    .sere{
     .ivu-form-item{
       // margin-bottom: 8px;
@@ -581,7 +586,7 @@
           </tr>
         </thead>
 
-        <tbody v-for="(n, index) in datas" :key="n.length">
+        <tbody v-for="(n, index) in datas" :key="n.length" :class="{demotableinforow:indextbody == index}">
           <tr class="fenge">
             <td colspan="7"></td>
           </tr>
@@ -599,7 +604,7 @@
               <div class="dspodasd"><span class="span_ddd">原地址：{{n.originalAddress}}</span></div>
             </td>
             <td class="text-c" style="text-align: center">
-              <a @click.prevent="routerse1(n.id)" href="javascript:;">查看详情</a>
+              <a @click.prevent="routerse1(n.id,index)" href="javascript:;">查看详情</a>
             </td>
           </tr>
           <tr class="lr_11 text-c paddse">
@@ -631,7 +636,7 @@
             </td>
             <td>{{n.followup}}</td>
             <td>
-              <a @click.prevent="routerse2(n.id)" href="javascript:;">编辑</a>
+              <a @click.prevent="routerse2(n.id,index)" href="javascript:;">编辑</a>
               <a v-if="cust08" @click.prevent="accesseeq(n.followup,n.id)" href="javascript:;">分配客户</a>
             </td>
           </tr>
@@ -668,7 +673,7 @@
         </div>
       </div>
          <div style="padding:0 0 100px 0">
-          <Page class="cf pages" :total="totals" :page-size="pageSize"  @on-change="changepage" show-total show-elevator></Page>
+          <Page class="cf pages" :current="current" :total="totals" :page-size="pageSize"  @on-change="changepage" show-total show-elevator></Page>
         </div>
       <Spin size="large" fix v-if="loadings"></Spin>
       <!-- se -->
@@ -687,6 +692,8 @@ export default {
           return {
             totals: 50, //总页数
             pageSize: 20, //每页显示
+            current:1,
+            indextbody:-1,
             loadings:true,
             screense:true,//条件
             cust08:false,//分配客户
@@ -827,7 +834,7 @@ export default {
               screens:{
                  name:'', //客户姓名
                  contact:'', //联系方式
-                 status:'', //客户状态
+                 status:'有效', //客户状态
                  gname:'', //客户公司
                  tradex:'', //客户行业
                  minaji:{
@@ -877,7 +884,6 @@ export default {
         },
         mounted(){
            this.adminname(); //人员
-           this.showHide(1); //table
            this.accesse(); //权限
 
            let _this = this;
@@ -903,6 +909,29 @@ export default {
             .catch(function (err) {
                 _this.$Notice.error({title: '人员错误'});
             })
+
+            // this.showHide(1); //table
+            if (Cookies.getJSON('screense3') ==0 || Cookies.getJSON('screense3') == undefined ) {
+              this.showHide(1); //类表
+             }else{
+               let se = Cookies.getJSON('screense3')
+               let page = Cookies.getJSON('page3')
+               console.log(page)
+               this.screens = se
+               if (page == undefined) {
+                 this.current = 1
+                 this.showHidese(1)
+               }else{
+                 this.current = page
+                 this.showHidese(page); //类表
+               }
+             }
+
+             if (Cookies.set('params2') == undefined) {
+                this.indextbody = -1
+             }else{
+                this.indextbody = Number(Cookies.set('params2'))
+             }
 
         },
         methods:{
@@ -949,7 +978,16 @@ export default {
              })
             .then(function (res) {
               if (res.data.statusx == 200) {
-               _this.followupdata = res.data.message
+               _this.followupdata = res.data.message;
+               for (var i = 0; i < _this.followupdata.length; i++) {
+                 if (_this.followupdata[i].children.length == 1) {
+                  _this.followupdata[i].children.push({
+                    value: '公共账号',
+                    label: '公共账号'
+                  })
+                 }
+               }
+               _this.followupdata = res.data.message;
               }else{
                 _this.$Notice.error({title: '人员错误'});
               }
@@ -1003,10 +1041,12 @@ export default {
                })
             },
          changepage(page) {
+          var ele = document.getElementById('singlepagecon');
+              ele.scrollTop = 0;
               //翻页
               var _this = this;
               _this.loadings = true;
-
+              Cookies.set('page3', page); //权限
               if(_this.screense){
                 _this.showHidese(page);
               }else{
@@ -1020,6 +1060,7 @@ export default {
               let _this = this;
                _this.screense = true; //有搜索条件
                _this.loadings = true;
+               Cookies.set('screense3', _this.screens); //权限
                //搜索
                _this.showHidese(1);
                 // Cookies.set('screenss', true);
@@ -1030,6 +1071,7 @@ export default {
               let _this = this;
               _this.screense = false; //无搜索条件
               _this.showHide(1);
+              Cookies.set('screense3', 0); //权限
               _this.screens ={
                 name:'', //客户姓名
                  contact:'', //联系方式
@@ -1057,14 +1099,16 @@ export default {
                  cascader:[], //来源
               }
             },
-            routerse1(e){
+            routerse1(e,a){
+              Cookies.set('params2', a,{ expires: 0.1 })
               let query = { deal_id: e};
                 this.$router.push({
                  name: 'clientadd_look',
                  query: query
                 });
             },
-            routerse2(e){
+            routerse2(e,a){
+              Cookies.set('params2', a,{ expires: 0.1 })
               let query = { deal_id: e};
                 this.$router.push({
                  name: 'clientadd_edit',

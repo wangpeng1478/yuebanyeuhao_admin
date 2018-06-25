@@ -915,16 +915,6 @@ export default {
                     title: '请填写客户姓名',
                 });
                 return false;
-             }else if (_this.clientadd.contact["0"].phonenumber.name =='') {
-                this.$Notice.warning({
-                    title: '请填写客户手机',
-                });
-                return false;
-             }else if (_this.clientadd.contact["0"].tel.name =='' || _this.clientadd.contact["0"].tel.names =='') {
-                this.$Notice.warning({
-                    title: '请填写客户座机',
-                });
-                return false;
              }else if (_this.clientadd.contact["0"].mail.name =='') {
                 this.$Notice.warning({
                     title: '请填写客户邮箱',
@@ -946,6 +936,21 @@ export default {
                 });
                 return false;
              }
+             if (_this.clientadd.contact["0"].phonenumber.name =='') {
+               if(_this.clientadd.contact["0"].tel.name =='' || _this.clientadd.contact["0"].tel.names ==''){
+                this.$Notice.warning({
+                    title: '请填写客户手机/座机',
+                });
+                return false;
+               }
+             }
+             // else if (_this.clientadd.contact["0"].tel.name =='' || _this.clientadd.contact["0"].tel.names =='') {
+             //    this.$Notice.warning({
+             //        title: '请填写客户座机',
+             //    });
+             //    return false;
+             // }
+             // return false;
             _this.loading = true;
             axios({
               method:'post',

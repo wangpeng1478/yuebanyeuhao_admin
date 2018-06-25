@@ -312,6 +312,15 @@
     <pre>{{datas}}</pre>
        <Row>
          <Col :xs="24" :sm="24" :md="8" :lg="6" style="padding:5px">
+         <Card style="margin-bottom: 10px;">
+            <p slot="title">
+                <Icon type="person"></Icon>
+                信息
+            </p>
+            <p>公司:{{mean.gname}}</p>
+            <p>大厦:{{mean.fname}}</p>
+            <p>层数:{{mean.hnumber}}</p>
+         </Card>
              <Card style="margin-bottom: 10px;max-height:600px;overflow:auto">
                     <p slot="title">
                         <Icon type="person"></Icon>
@@ -453,6 +462,7 @@ export default {
              progr:'',
              master:'',
              uptime:'',
+             mean:{},
           }
         },
         mounted(){
@@ -484,7 +494,8 @@ export default {
                   headers:{Authorization:'Bearer '+Cookies.set('keya')},
                })
               .then(function (res) {
-                 // console.log(res)
+                 console.log(res.data.message.mean)
+                 _this.mean = res.data.message.mean
                  _this.plus = res.data.message.plus
                  _this.reduce = res.data.message.reduce
                  _this.Timeline = res.data.message.hist

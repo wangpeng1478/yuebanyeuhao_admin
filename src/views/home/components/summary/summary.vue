@@ -1,5 +1,5 @@
 <style lang="less">
-   
+
 </style>
 
 <template>
@@ -29,7 +29,7 @@ export default {
         init () {
             this.$nextTick(() => {
                 let vm = this;
-                let height = 400;
+                let height = 200;
                 tinymce.init({
                     selector: '#tinymceEditer',
                     branding: false,
@@ -49,7 +49,8 @@ export default {
                     paste_webkit_styles: true,
                     table_default_styles: {
                         width: '100%',
-                        borderCollapse: 'collapse'
+                        borderCollapse: 'collapse',
+                        height:'220px'
                     },
                     setup: function (editor) {
                         editor.on('init', function (e) {

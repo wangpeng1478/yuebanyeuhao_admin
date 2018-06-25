@@ -117,6 +117,7 @@
                   clearable
                   remote
                   :remote-method="remoteMethod"
+                  @on-change = "changqeeeeee"
                   placeholder = '请搜索楼盘'
                   :loading="loadingse">
                       <Option v-for="(option, index) in optionsName" :value="option.value" :key="index">{{option.label}}</Option>
@@ -354,7 +355,7 @@
              <Col>
               <FormItem label="出售价格">
               <div style="width:150px;display:inline-block;" v-if="Negotiableses">
-                  <Input v-model="houseadd.Forsale1">
+                  <Input v-model="houseadd.Forsale1" @on-blur="zuqi">
                       <span slot="append">元/m²</span>
                   </Input>
               </div>
@@ -594,6 +595,15 @@ export default {
            this.ajaxName();//大楼名字
         },
         methods:{
+         zuqi(){
+          let a = Number(this.houseadd.area2),
+              b = Number(this.houseadd.Forsale1),
+              c = Number(this.houseadd.Forsale2)
+           console.log(a)
+           console.log(b)
+           console.log(c)
+           this.houseadd.Forsale2 = a*b
+         },
          ajaxName(e){
           let _this = this;
            _this.loading1 = true;
@@ -703,21 +713,26 @@ export default {
           let e = this.houseadd.Addconditions;
           let a = 0;
            for (var i = 0; i < e.length; i++) {
-            let s = parseInt(e[i].area);
+            let s = Number(e[i].area);
               a+=s;
            }
            this.houseadd.area2 = a;
          },
          Caaddjias(){
-          let a = parseInt(this.houseadd.area2); //总面积
-          let b = parseInt(this.houseadd.money3); //预估
-          let e = parseInt(this.houseadd.property); //单价
-          let c = Math.round(a*b*365/12);
+          let a = Number(this.houseadd.area2); //总面积
+          let b = Number(this.houseadd.money3); //预估
+          let e = Number(this.houseadd.property); //单价
+          let s = a*b*365/12;
+          let c = Math.round(s);
+          let w = a*e;
           if (c === "") {
             console.log(0)
           }
+          // console.log(a)
+          // console.log(b)
+          // console.log(c)
           this.houseadd.money2 = c;
-          this.houseadd.propertyz = Math.round(a*e);
+          this.houseadd.propertyz = Math.round(w);
          },
          addEdit(e){
             if (e == 1) {
@@ -851,41 +866,73 @@ export default {
               identity:[],//房源类型
               introduce:'',//备注
              }
+          },
+          changqeeeeee(value){
+            let _this = this;
+            if (value !== '') {
+              axios({
+                method:'post',
+                url:'/api/lagaadd?name='+value,
+                headers:{Authorization:'Bearer '+Cookies.set('keya')},
+             })
+              .then(function (res) {
+                  _this.houseadd.property = res.data.message["0"].property2
+                  console.log(res.data.message["0"].property2)
+                  _this.Addcondition = res.data.message;
+                  _this.yiyouCard = res.data.message[2];
+                  _this.Addsefas = true;
+                  _this.worthName = true;
+                  _this.houseadd.id = res.data.message[0].ofid;
+                  _this.houseadd.Addconditions = []
+              })
+              .catch(function (err) {
+                  _this.$Notice.error({title: '大楼参数错误'});
+              })
+            }else{
+                console.log('kong')
+               _this.houseadd.id = ''
+               _this.Addsefas = false;
+               _this.worthName = false;
+               _this.yiyouCard = [];
+               _this.Addcondition = [];
+            }
+            
+           
           }
       },
    watch:{
      houseadd: {
       handler: function (val, oldVal){
-        let _this = this;
-        if (val.name !==''){
-         if (!_this.worthName) {
-           _this.Addcondition = [];
-           _this.yiyouCard = [];
-           axios({
-              method:'post',
-              url:'/api/lagaadd?name='+val.name,
-              headers:{Authorization:'Bearer '+Cookies.set('keya')},
-           })
-          .then(function (res) {
-              // console.log(JSON.stringify(res.data.message))
-              _this.Addcondition = res.data.message;
-              _this.yiyouCard = res.data.message[2];
-              _this.Addsefas = true;
-              _this.worthName = true;
-              _this.houseadd.id = res.data.message[0].ofid;
-              _this.houseadd.Addconditions = []
-          })
-          .catch(function (err) {
-              _this.$Notice.error({title: '大楼参数错误'});
-          })
-         }
+        // let _this = this;
+        // if (val.name !==''){
+        //  if (!_this.worthName) {
+        //    _this.Addcondition = [];
+        //    _this.yiyouCard = [];
+        //    axios({
+        //       method:'post',
+        //       url:'/api/lagaadd?name='+val.name,
+        //       headers:{Authorization:'Bearer '+Cookies.set('keya')},
+        //    })
+        //   .then(function (res) {
+        //       // console.log(JSON.stringify(res.data.message))
+        //       _this.Addcondition = res.data.message;
+        //       _this.yiyouCard = res.data.message[2];
+        //       _this.Addsefas = true;
+        //       _this.worthName = true;
+        //       _this.houseadd.id = res.data.message[0].ofid;
+        //       _this.houseadd.Addconditions = []
+        //   })
+        //   .catch(function (err) {
+        //       _this.$Notice.error({title: '大楼参数错误'});
+        //   })
+        //  }
            
-        }else if(val.name ==''){
-           _this.Addsefas = false;
-           _this.worthName = false;
-           _this.yiyouCard = [];
-           _this.Addcondition = [];
-        }
+        // }else if(val.name ==''){
+        //    _this.Addsefas = false;
+        //    _this.worthName = false;
+        //    _this.yiyouCard = [];
+        //    _this.Addcondition = [];
+        // }
 
       },
       deep: true

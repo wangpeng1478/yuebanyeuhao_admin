@@ -405,14 +405,18 @@ export default {
             this.addg.station.splice(e,1)
            },
            modal2true(e,a){
-            this.Uploadst = true
+            this.Uploadst = false
+            
             this.indexs = e
             this.modal2 = true
             this.dataimg = []
             this.dataimg = a
-            
+            setTimeout(()=>{
+               this.Uploadst = true
+            },200)
            },
            outlinese(){
+             console.log(this.$refs.imgadd.img)
              this.addg.station[this.indexs].dataimg = this.$refs.imgadd.img;
              this.dataimg = []
              this.modal2 = false

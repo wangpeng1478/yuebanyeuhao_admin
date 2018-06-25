@@ -460,7 +460,7 @@
                 </p>
                  <Form ref="followUp" :model="followUp" :label-width="80" :rules="ruleInline">
                       <FormItem label="房源状态">
-                           <RadioGroup v-model="followUp.status" type="button">
+                           <RadioGroup v-model="followUp.status" type="button" @on-change="timeseraio">
                                 <Radio label="待定"></Radio>
                                 <Radio label="有效"></Radio>
                                 <Radio label="已租"></Radio>
@@ -469,6 +469,9 @@
                                 <Radio label="我租"></Radio>
                             </RadioGroup>
                       </FormItem>
+                       <FormItem label="到期日期" v-if="timebuer">
+                          <DatePicker v-model="followUp.time" type="date"></DatePicker>
+                       </FormItem>
                        <FormItem label="是否上架">
                            <RadioGroup v-model="followUp.yesNo" type="button">
                                 <Radio label="下架"></Radio>
@@ -532,6 +535,7 @@ export default {
           return {
              id:'',
              modal2r:false,
+             timebuer:false,
              popupdata:{},
              roid:'',
              plus:'',
@@ -579,7 +583,14 @@ export default {
             this.recording(this.id); //data
         },
         methods:{
-         
+          timeseraio(valid){
+             this.followUp.time = '';
+             if (valid == '已租' || valid == '我租') {
+               this.timebuer = true
+             }else{
+               this.timebuer = false
+             }
+          },
           recording(e){
              let _this = this;
               _this.jaizailock = false
@@ -597,6 +608,12 @@ export default {
                  _this.reduce = res.data.message.reduce
                  _this.louman = res.data.message.louman
                  _this.followUp.status = res.data.message.progr
+                 // res.data.message.progr
+                 if (res.data.message.progr == '已租' || res.data.message.progr == '我租') {
+                   _this.timebuer = true
+                 }else{
+                   _this.timebuer = false
+                 }
                  _this.followUp.yesNo = res.data.message.hidex
                  _this.imgyesNO = res.data.message.imgyesNO
                  _this.uptime = res.data.message.uptime;
@@ -701,8 +718,12 @@ export default {
             _this.miids = e;
             axios({
               method:'post',
-              url:'/api/manlook1?maid='+e,
-              headers:{Authorization:'Bearer '+Cookies.set('keya')}
+              url:'/api/manlook1',
+              headers:{Authorization:'Bearer '+Cookies.set('keya')},
+              data:{
+                maid:e,
+                roid:_this.id
+              }
            })
             .then(function (res){
               // console.log(res.data)
@@ -769,6 +790,7 @@ export default {
                           _this.nameC(_this.id); //data
                           _this.recording(_this.id); //data
                           _this.followUp.con = '';
+                          _this.followUp.time = '';
                           _this.handleSubloing = false;
                          // _this.
                        }else{

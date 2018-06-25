@@ -37,9 +37,9 @@
              <Alert type="success">
                 <h3 class="h33">待确认客户</h3>
                 <span slot="desc">
-                    (有需求,但不明确)一周跳窗提醒一次,若无跟进<b style="color:red">{{time.value2}}</b>小时后再次跳窗提醒,若当日24点前还是无跟进将自动转为公客。
+                    (有需求,但不明确)<b style="color:red">{{time.value2}}</b>小时跳窗提醒一次,若无跟进24小时后再次跳窗提醒,若当日24点前还是无跟进将自动转为公客。
                     <p class="toime">
-                        <InputNumber :max="100" :min="1" v-model="time.value2"></InputNumber>
+                        <InputNumber :max="1000" :min="1" v-model="time.value2"></InputNumber>
                         <span>小时</span>
                     </p>
                 </span>

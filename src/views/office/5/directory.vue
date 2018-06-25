@@ -605,6 +605,8 @@ export default {
 
             },
            changepage(page) {
+            var ele = document.getElementById('singlepagecon');
+              ele.scrollTop = 0;
               //翻页
               var _this = this;
               _this.spinShow = true;

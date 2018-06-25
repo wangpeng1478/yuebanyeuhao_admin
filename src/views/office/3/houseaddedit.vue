@@ -364,12 +364,12 @@
               <p v-if="n.moldx == '公司名称'"><Icon type="ios-home-outline"></Icon> {{n.moldx}}: {{n.subs}}</p>
               <p v-if="n.moldx == '手机'"><Icon type="iphone"></Icon> {{n.moldx}}: {{n.subs}}</p>
               <p v-if="n.moldx == '固话'"><Icon type="ios-telephone"></Icon> {{n.moldx}}: {{n.subs}}</p>
-              <p v-if="n.moldx == '名片正'"><Icon type="card"></Icon> {{n.moldx}}: <a href="#" @click.prevent='clickCard(n.subs)'>点击查看</a></p>
-              <p v-if="n.moldx == '名片反'"><Icon type="card"></Icon> {{n.moldx}}: <a href="#" @click.prevent='clickCard(n.subs)'>点击查看</a></p>
+              <p v-if="n.moldx == '名片正'"><Icon type="card"></Icon> {{n.moldx}}: <a href="#" @click.prevent='clickCard(n.subs)'>查看</a></p>
+              <p v-if="n.moldx == '名片反'"><Icon type="card"></Icon> {{n.moldx}}: <a href="#" @click.prevent='clickCard(n.subs)'>查看</a></p>
             </div>
           </div>
            <div v-else>
-              <Button type="primary" size="small" @click="clickMaids(item.maid,index)">申请查看</Button>
+              <Button type="primary" size="small" @click="clickMaids(item.maid,index)">点击查看</Button>
             </div>
           </Card>
            <Modal
@@ -697,14 +697,18 @@ export default {
             this.clickCards = true;
           },
            clickMaids(e,a){
-            //申请查看
+            //点击查看
             let _this = this;
             _this.indexMaid = a;
             _this.miids = e;
             axios({
               method:'post',
-              url:'/api/manlook1?maid='+e,
-              headers:{Authorization:'Bearer '+Cookies.set('keya')}
+              url:'/api/manlook1',
+              headers:{Authorization:'Bearer '+Cookies.set('keya')},
+              data:{
+                maid:e,
+                roid:_this.id
+              }
            })
             .then(function (res){
               // console.log(res.data)

@@ -361,6 +361,8 @@ export default {
 
         },
         changepage(page) {
+            var ele = document.getElementById('singlepagecon');
+            ele.scrollTop = 0;
             this.changeLimit(page);
         },
         addDeal(){

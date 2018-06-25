@@ -15,8 +15,6 @@
 
     <div class="home-main">
         <Row :gutter="10" class="body_s">
-        
-
           <Col :md="24" :lg="24" :style="{marginBottom: '10px'}">
                 <Card>
                     <Row>
@@ -208,10 +206,10 @@ export default {
                     headers: { Authorization: 'Bearer ' + Cookies.set('keya') }
                 })
                 .then(function(res) {
-                   
+                   console.table(res.data)
                    if (res.data.message.power) {
                      if(Cookies.set('remind') == undefined){
-                       Cookies.set('remind', 0,{ expires: 0.25 }); //6个小时
+                        Cookies.set('remind', 0,{ expires: 0.25 }); //6个小时
                        _this.remind = res.data.message.power
                     }
                    }
@@ -223,35 +221,35 @@ export default {
                 })
         },
         times2(){
-              let _this = this;
-               axios({
-                    method: 'post',
-                    url: '/api/warncapt',
-                    headers: { Authorization: 'Bearer ' + Cookies.set('keya') }
-                })
-                .then(function(res) {
-                  // console.log(res.data.message.power)
-                  // console.log(res.data.message.data)
-                  _this.remind2 = res.data.message.power
-                  _this.data2 = res.data.message.data
-                })
-                .catch(function(err) {
-                    _this.$Notice.error({ title: '提醒错误' });
-                })
+           let _this = this;
+           axios({
+                method: 'post',
+                url: '/api/warncapt',
+                headers: { Authorization: 'Bearer ' + Cookies.set('keya') }
+            })
+            .then(function(res) {
+              // console.log(res.data.message.power)
+              // console.log(res.data.message.data)
+              _this.remind2 = res.data.message.power
+              _this.data2 = res.data.message.data
+            })
+            .catch(function(err) {
+                _this.$Notice.error({ title: '提醒错误' });
+            })
         },
         lookese(e){
-          let _this = this;
-               axios({
-                    method: 'post',
-                    url: '/api/warndel?id='+e,
-                    headers: { Authorization: 'Bearer ' + Cookies.set('keya') }
-                })
-                .then(function(res) {
-                  // console.log(res)
-                })
-                .catch(function(err) {
-                    _this.$Notice.error({ title: '提醒错误' });
-                })
+           let _this = this;
+           axios({
+                method: 'post',
+                url: '/api/warndel?id='+e,
+                headers: { Authorization: 'Bearer ' + Cookies.set('keya') }
+            })
+            .then(function(res) {
+              // console.log(res)
+            })
+            .catch(function(err) {
+                _this.$Notice.error({ title: '提醒错误' });
+            })
         },
         TabsVis(e){
           this.indexs= e;

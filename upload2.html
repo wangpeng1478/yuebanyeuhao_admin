@@ -12,7 +12,7 @@
   <!-- UC强制全屏 -->
   <meta name="full-screen" content="yes">
   <!-- QQ强制全屏 -->
-  <title>选址推荐书 - 上海德御房地产经纪事务所</title>
+  <title>上传名片</title>
   <meta name="description" content="选址推荐书 - 上海德御房地产经纪事务所">
   <meta name="keywords" content="选址推荐书 - 上海德御房地产经纪事务所">
   <link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/iview/2.13.0/styles/iview.css">
@@ -20,13 +20,14 @@
   <script type="text/javascript" src="https://cdn.bootcss.com/iview/2.13.0/iview.min.js"></script>
   <style>
   html,body{
-    background: #fff url(http://www.yuebanyuehao.com/image/vueAdmin/phone_bg.jpg);
+    background: #fff url(http://47.98.155.165/image/vueAdmin/phone_bg.jpg);
   }
   .upload{
     padding: 0.170667rem;
   }
   .Uploadsee{
     width: 100%;
+    margin:0.170667rem 0;
   }
   .Uploadsee .ivu-upload-select{
     width: 100%;
@@ -37,22 +38,6 @@
   }
   .Uploadsee .ivu-upload-select .ivu-upload-drag{
      padding: 0.170667rem
-  }
-  .uploadimg{
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    border-bottom: 1px solid #dddee1;
-    margin-bottom: 10px;
-    padding-bottom: 10px;
-  }
-  .uploadimg a{
-    width: 25%;
-  }
-  .uploadimg img{
-    width: 100%;
-    height: auto;
-    padding: 0 3%;
   }
   .buttons{
     font-size: 11px;
@@ -66,8 +51,22 @@
   .ivu-alert{
     margin: 0.170667rem 0;
   }
-  pre{
+ .uploadimg{
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #dddee1;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+  }
+  .uploadimg a{
+    width: 50%;
+    margin:0 0.034133rem;
+  }
+  .uploadimg img{
     width: 100%;
+    height: auto;
+    padding: 0 3%;
+    border: 1px solid #eee;
   }
   </style>
 </head>
@@ -81,13 +80,17 @@
    <Card>
         <p slot="title">
             <Icon type="upload"></Icon>
-            上传图片
+            上传名片
         </p>
-        <div class="uploadimg" v-if="img.length !==0">
-         <a :href="n.url" target="_blank" v-for="n in img" :key="n.length">
-           <img :src="n.url">
+        <div class="uploadimg">
+         <a :href="img" target="_blank">
+           <img :src="img">
+         </a>
+          <a :href="img2" target="_blank">
+           <img :src="img2">
          </a>
         </div>
+
         <div class="div">
         <Upload class="Uploadsee" 
         multiple
@@ -105,7 +108,26 @@
         :max-size="10240">
         <div class="ivu-upload-drag">
             <Icon type="ios-cloud-upload"></Icon>
-            <p>点击上传图片</p>
+            <p>上传正面</p>
+        </div>
+      </Upload>
+       <Upload class="Uploadsee" 
+        multiple
+        :headers="keys"
+        :action='actionUrl2' 
+        :before-upload="beforeUpload1"
+        :on-progress='onProgress1'
+        :on-success='onSuccess1'
+        :on-error='onError1'
+        :on-preview='onPreview1'
+        :on-remove='onRemove1'
+        :on-format-error='onFormatError1'
+        :on-exceeded-size='onExceededSize1'
+        :format="['jpg','jpeg','png','gif']"
+        :max-size="10240">
+        <div class="ivu-upload-drag">
+            <Icon type="ios-cloud-upload"></Icon>
+            <p>上传反面</p>
         </div>
       </Upload>
           <Alert show-icon>上传完毕后点击网页中的 <b>“我已上传完毕”</b> 即可</Alert>
@@ -121,14 +143,16 @@
   new Vue({
     el: '#app',
     data: {
-      actionUrl: '',
+      actionUrl: '', //正
+      actionUrl2: '', //反
       dataurls: dataurl,
       spinShow: true,
       keys: {},
-      img:[]
+      img:'http://47.98.155.165/image/vueAdmin/zheng.jpg',//正
+      img2:'http://47.98.155.165/image/vueAdmin/fan.jpg',//反
     },
     mounted(){
-      this.keys = {
+        this.keys = {
             key: 'key',
             name:'admin'
         };
@@ -137,6 +161,7 @@
         let data3 = data2.split(',')
         if (data3.length ==2) {
           this.actionUrl = '/api/webup?webid='+data3[0]+'&master='+data3[1]
+          this.actionUrl2 = '/api/webup?webid='+data3[0]+'&master='+data3[1]
           this.spinShow = false;
         }else{
           this.$Notice.error({
@@ -155,10 +180,11 @@
        },
        onSuccess(response, file, fileList){
          // ok
-          console.log(response.message)
-          this.img.push({
-            url:'http://www.yuebanyuehao.com'+response.message
-          })
+          console.log(response)
+          // img
+          // this.img.push({
+          //   url:'http://47.98.155.165'+response.message
+          // })
        },
        onError(error, file, fileList){
          console.log(error)
@@ -192,6 +218,51 @@
        headerss(){
          // return Authorization:'Bearer '+Cookies.set('keya')
        },
+       beforeUpload1(){
+         //参数为上传的文件，若返回 false 或者 Promise 则停止上传
+       },
+       onProgress1(event, file, fileList){
+       },
+       onSuccess1(response, file, fileList){
+         // ok
+          console.log(response)
+          // img
+          // this.img.push({
+          //   url:'http://47.98.155.165'+response.message
+          // })
+       },
+       onError1(error, file, fileList){
+         console.log(error)
+         console.log(file)
+         console.log(fileList)
+         this.$Notice.warning({
+                    title: '文件上传失败',
+                    desc: '文件  ' + file.name + ' 文件上传失败'
+                });
+         
+       },
+       onPreview1(file){
+         //可以通过 file.response 拿到服务端返回数据
+         // console.log(file)
+       },
+       onRemove1(file, fileList){
+       },
+       onFormatError1(file, fileList){
+         this.$Notice.warning({
+              title: '文件格式不正确',
+              desc: '文件格式 ' + file.name + ' 不正确，[jpg,jpeg,png,gif]'
+          });
+
+       },
+       onExceededSize1(file, fileList){ 
+          this.$Notice.warning({
+                    title: '超出文件大小限制',
+                    desc: '文件  ' + file.name + ' 太大，不超过10M。'
+                });
+       },
+       headerss1(){
+         // return Authorization:'Bearer '+Cookies.set('keya')
+       },
     }
   })
 
@@ -216,7 +287,7 @@
 })(document, window);
 //rem布局
 
-//http://pan.baidu.com/share/qrcode?w=250&h=250&url=http://www.yuebanyuehao.com/admin/upload.html
+//http://pan.baidu.com/share/qrcode?w=250&h=250&url=http://47.98.155.165/admin/upload.html
   </script>
 </body>
 

@@ -170,7 +170,7 @@
      <Card class='sere'>
         <p slot="title">
            <Icon type="ios-paper"></Icon>
-            企业名录
+            共享办公
         </p>
         <Form :model="screens" :label-width="80">
           <Row>
@@ -190,7 +190,7 @@
                   clearable
                   remote
                   :remote-method="remoteMethod"
-                  placeholder = '请搜索楼盘'>
+                  :placeholder="sesongs">
                       <Option v-for="(option, index) in optionsName" :value="option.value" :key="index">{{option.label}}</Option>
                   </Select>
               </FormItem>
@@ -377,6 +377,7 @@ export default {
              totals2:0,
              totals3:0,
              pageSize:0,
+             sesongs:'请搜索楼盘',
              screense:false,// true 有搜索条件 false 无搜索条件
              region:[],
              metros:[],
@@ -429,7 +430,37 @@ export default {
             this.ajaxName();//大楼名字
             this.adminname();//大楼名字
             this.datiename();//大楼名字
-            this.buildingls(1);//表
+            
+
+            if (Cookies.getJSON('screense3') ==0 || Cookies.getJSON('screense3') == undefined ) {
+                this.buildingls(1);//表
+                console.log('no')
+          }else{
+             let se = Cookies.getJSON('screense3')
+             let page = Cookies.getJSON('page3')
+              console.log('yes')
+             this.sesongs = se.name
+             this.screens.timese = se.timese
+             this.screens.brands = se.brands
+             this.screens.regions = se.regions
+             this.screens.metro = se.metro
+             this.screens.ascription = se.ascription
+             this.screens.rentmin = se.rentmin
+             this.screens.rentmax = se.rentmax
+             this.screens.id = se.id
+             this.screens.grade = se.grade
+
+             if (page == undefined) {
+               this.current = 1
+               this.buildinglser(1)
+             }else{
+               this.current = page
+               this.buildinglser(page); //类表
+             }
+             console.log(page)
+             
+          }
+
         },
         methods:{
            changegong(e){
@@ -644,20 +675,49 @@ export default {
                 _this.$Notice.error({title: '类表错误'});
             })
           },
+           buildinglser(e){
+            let _this = this;
+             _this.spinShow = true;
+            axios({
+                method:'post',
+                url:'/api/sharelist?page='+e,
+                headers:{Authorization:'Bearer '+Cookies.set('keya')},
+                data:{
+                  jo:Cookies.getJSON('screense3')
+                }
+             })
+            .then(function (res) {
+              _this.totals = res.data.message.totals; //列表数据
+              _this.totals2 = res.data.message.totals2; //列表数据
+              _this.totals3 = res.data.message.totals3; //列表数据
+              _this.pageSize = res.data.message.pageSize; //每页显示
+              _this.datas = res.data.message.data;
+              _this.spinShow = false;
+            })
+            .catch(function (err) {
+                _this.$Notice.error({title: '类表错误'});
+            })
+          },
           screenss(){
               this.spinShow = true;
               this.screense = true; //有搜索条件
               this.buildinglse(1);
+              Cookies.set('screense3', this.screens); //权限
             },
           reson(){
               this.spinShow = true;
               this.screense = false; //wu搜索条件
               this.screens = {};
               this.buildingls(1)
+              Cookies.set('screense3', 0);
+              this.sesongs = '请搜索楼盘' 
           },
           changepage(page) {
+            var ele = document.getElementById('singlepagecon');
+              ele.scrollTop = 0;
               //翻页
               this.spinShow = true;
+              Cookies.set('page3', page); //权限
               if(this.screense) {
                 this.buildinglse(page)
               }else{

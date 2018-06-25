@@ -30,6 +30,19 @@
       max-width:70%;
       min-width: 840px;
     }
+    .uploadet{
+      .ivu-upload{
+        width: 50%;
+        text-align: center;
+        border: 1px dashed #9E9E9E;
+        .up2{
+          padding:30px;
+        }
+        img{
+          width:100%;
+        }
+      }
+    }
  }
 </style>
 
@@ -54,11 +67,11 @@
               <Row>
                 <Col>
                    <FormItem label="添加楼盘"  class="ivu-form-item-required">
+                       <Tooltip content="添加更多楼盘" placement="top">
+                            <Button @click="addlou" icon="ios-plus-outline">添加更多楼盘</Button>
+                        </Tooltip>
                         <Tooltip content="添加专用大楼" placement="top">
                             <Button @click="addprivate" icon="ios-plus">添加专用大楼</Button>
-                        </Tooltip>
-                        <Tooltip content="添加更多楼盘" placement="top">
-                            <Button @click="addlou" icon="ios-plus-outline">添加更多楼盘</Button>
                         </Tooltip>
                   </FormItem>
                 </Col>
@@ -76,8 +89,8 @@
                          placeholder = '请搜索楼盘'>
                           <Option v-for="(option, index) in optionsName" :value="option.value" :key="index">{{option.label}}</Option>
                        </Select>
-                       <InputNumber :max="100" :min="1" v-model="n.layer"></InputNumber>
-                       <span class="sanwei">层</span>
+                       <Input style="max-width: 100px;display: inline-block;" v-model="n.layer"></Input>
+                       <!-- <span class="sanwei">层</span> -->
                         <Poptip
                           confirm
                           :title="'确定删除 楼盘' + index"
@@ -94,8 +107,8 @@
                        <Cascader class="wi3d" :data="region" v-model="n.regions"></Cascader>
                        <Input class="wi3d" v-model="n.louname" placeholder='楼盘名称'></Input>
                        <Input class="wi3d" v-model="n.address" placeholder='显示地址'></Input>
-                       <InputNumber :max="100" :min="1" v-model="n.layer"></InputNumber>
-                       <span class="sanwei">层</span>
+                       <Input style="max-width: 100px;display: inline-block;" v-model="n.layer"></Input>
+                       <!-- <span class="sanwei">层</span> -->
                         <Poptip
                           confirm
                           :title="'确定删除 专用大楼' + index"
@@ -170,13 +183,30 @@
                 添加品牌图片
             </p>
              <Uploads ref="imgadd"></Uploads>
+              <!-- <Upload 
+              action="/api/imgup"
+              :headers="keys"
+              :format="['jpg','jpeg','png','gif']"
+              :on-success='onSuccess'
+              :on-error='onError' class="uploadet">
+              <div class="uploade">
+                 <div v-if="cardz =='' " class="up2">
+                   <Icon type="ios-cloud-upload" size="25" style="color: #3399ff;margin-top: 10px;"></Icon>
+                   <p>点击上传品牌图片</p>
+                 </div>
+                 <div v-else class="up3">
+                   <img :src="cardz">
+                 </div>
+              </div>
+              </Upload>
+              <a v-if="cardz !==''" :href="cardz" target="_blank">查看大图</a> -->
         </Card>
 
         <Card style="margin:15px 0 30px 0;text-align: center;">
-               <Button @click="handleSubmit" type="success" size="large" long :loading="loading">
-                 <span v-if="!loading">添加品牌</span>
-                 <span v-else>添加品牌中...</span>
-               </Button>
+           <Button @click="handleSubmit" type="success" size="large" long :loading="loading">
+             <span v-if="!loading">添加品牌</span>
+             <span v-else>添加品牌中...</span>
+           </Button>
        </Card>
 
    </div>
@@ -195,6 +225,8 @@ export default {
     },
       data () {
           return {
+             cardz:"",
+             keys:{},
              region:[],//区域
              data:[],//区域
              optionsName:[], //lou
@@ -215,10 +247,24 @@ export default {
           }
         },
         mounted(){
+            this.keys = {
+               Authorization:'Bearer '+Cookies.set('keya')
+            };
             this.quyu();
             this.ajaxName();//大楼名字
         },
         methods:{
+          onSuccess(response, file, fileList){
+              // console.log(response.message)
+              this.cardz = 'http://www.yuebanyuehao.com'+response.message
+          },
+          onError(error, file, fileList){
+               // console.log('文件上传失败')
+              this.$Notice.warning({
+                    title: '文件上传失败',
+                    desc: file.name
+                });
+         },
          sharedanamef(){
            let _this = this;
            let yan = _this.sharedadds;

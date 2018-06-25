@@ -105,6 +105,26 @@
             </div>
         </Modal>
 
+        <Modal v-model="Modal123" :closable='false' :mask-closable='false' :width="500">
+            <h3 slot="header" style="color:#2D8CF0">转移房源{{id}}</h3>
+              <ul class="Modal1">
+                <li><span>用户名:</span>{{Modal1data.name}}</li>
+                <li><span>英文名:</span>{{Modal1data.ename}}</li>
+                <li><span>是否激活:</span>{{Modal1data.act}}</li>
+                <li><span>客户:</span>{{Modal1data.clue}}</li>
+                <li><span>房源:</span>{{Modal1data.yuan}}</li>
+                <li><span>部门:</span>{{Modal1data.branchx}}部</li>
+                <li><span>电话:</span>{{Modal1data.phone}}</li>
+              </ul>
+            <div slot="footer" class="footer12">
+                 <Select v-model="ascription" filterable clearable class="Select12">
+                      <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                 </Select>
+                 <Button type="primary" @click="moving23" :loading="loading23">转移客户</Button>
+                 <Button type="ghost" @click="Modal123 = false">取消</Button>
+            </div>
+        </Modal>
+
     <!-- 转移 -->
     <!-- 编辑用户 -->
 
@@ -208,6 +228,26 @@
             </div>
         </Modal>
    <!-- 添加角色 -->
+   <!-- mima -->
+        <Modal v-model="editPasswordModal" :closable='false' :mask-closable='false' :width="500">
+            <h3 slot="header" style="color:#2D8CF0">修改密码</h3>
+            <Form ref="editPasswordForm" :model="editPasswordForm" :label-width="100" label-position="right" :rules="passwordValidate">
+               <!--  <FormItem label="原密码" prop="oldPass" :error="oldPassError">
+                    <Input v-model="editPasswordForm.oldPass" placeholder="请输入现在使用的密码" ></Input>
+                </FormItem> -->
+                <FormItem label="新密码" prop="newPass">
+                    <Input v-model="editPasswordForm.newPass" placeholder="请输入新密码，至少6位字符" ></Input>
+                </FormItem>
+                <FormItem label="确认新密码" prop="rePass">
+                    <Input v-model="editPasswordForm.rePass" placeholder="请再次输入新密码" ></Input>
+                </FormItem>
+            </Form>
+            <div slot="footer">
+                <Button type="text" @click="cancelEditPass">取消</Button>
+                <Button type="primary" :loading="savePassLoading" @click="saveEditPass">保存</Button>
+            </div>
+        </Modal>
+   <!-- mima -->
     </Card>
    </div>
 </template>
@@ -227,7 +267,31 @@ export default {
                 callback();
             }
         };
+        const valideRePassword2 = (rule, value, callback) => {
+                if (value !== this.editPasswordForm.newPass) {
+                    callback(new Error('两次输入密码不一致'));
+                } else {
+                    callback();
+                }
+          };
         return {
+            editPasswordModal: false, // 修改密码模态框显示
+            savePassLoading: false, // 修改密码模态框显示
+            editPasswordForm: {
+                newPass: '',
+                rePass: ''
+              },
+            passwordValidate: {
+                    newPass: [
+                        { required: true, message: '请输入新密码', trigger: 'blur' },
+                        { min: 6, message: '请至少输入6个字符', trigger: 'blur' },
+                        { max: 32, message: '最多输入32个字符', trigger: 'blur' }
+                    ],
+                    rePass: [
+                        { required: true, message: '请再次输入新密码', trigger: 'blur' },
+                        { validator: valideRePassword2, trigger: 'blur' }
+                    ]
+                },
             id: '',
             auth:JSON.parse(Cookies.set('auth')),
             namese: '',
@@ -299,7 +363,7 @@ export default {
                 {
                     title: '操作',
                     key: 'iden',
-                    width: 280,
+                    width: 400,
                     fixed: 'right',
                     align: 'center',
                     render: (h, params) => {
@@ -350,7 +414,37 @@ export default {
                                         this.Transfer(params.row.id);
                                     }
                                 }
-                            }, '转移房源')
+                            }, '转移房源'),
+                             h('Button', {
+                                props: {
+                                    type: 'error',
+                                    size: 'small'
+                                },
+                                style: {
+                                    margin: '2px'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.id = params.row.id;
+                                        this.Transfer2(params.row.id);
+                                    }
+                                }
+                            }, '转移客户'),
+                            h('Button', {
+                                props: {
+                                    type: 'error',
+                                    size: 'small'
+                                },
+                                style: {
+                                    margin: '2px'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.namese = params.row.uname;
+                                        this.editPasswordModal = true
+                                    }
+                                }
+                            }, '修改密码')
                         ]);
                     }
                 }
@@ -363,6 +457,8 @@ export default {
             loading3: false,
             loading4: false,
             loading5: false,
+            loading23: false,
+            Modal123:false,
             Modal1: false, //转移房源/激活 true
             Modal1data: {}, //转移房源/激活 data
             ascription: '', //转移房源/激活 reata
@@ -427,6 +523,39 @@ export default {
         this.usadminse(); //ren
     },
     methods: {
+        cancelEditPass () {
+              this.editPasswordModal = false;
+            },
+            saveEditPass () {
+                this.$refs['editPasswordForm'].validate((valid) => {
+                    if (valid) {
+                        this.savePassLoading = true;
+                        // this.editPasswordModal = true;
+                        let _this = this;
+                        axios({
+                                method: 'post',
+                                url: '/api/modup2',
+                                headers: { Authorization: 'Bearer ' + Cookies.set('keya') },
+                                data:{"jo":{
+                                  name:_this.namese,
+                                  pass:_this.editPasswordForm.rePass
+                                }}
+                            })
+                            .then(function(res) {
+                                _this.$Message.success('修改密码成功');
+                                _this.savePassLoading = false;
+                                _this.editPasswordModal = false;
+                                _this.editPasswordForm = {
+                                  newPass: '',
+                                  rePass: ''
+                                }
+                            })
+                            .catch(function(err) {
+                                _this.$Notice.error({ title: '错误' });
+                            })
+                    }
+                });
+            },
         Modal4srrr() {
             this.Modal4 = true
             this.Editnew = true
@@ -506,6 +635,22 @@ export default {
                     _this.$Notice.error({ title: '用户错误' });
                 })
         },
+        Transfer2(e) {
+           // 转移 类表
+            let _this = this;
+            _this.Modal123 = true;
+            axios({
+                    method: 'post',
+                    url: '/api/useracti1?id=' + e,
+                    headers: { Authorization: 'Bearer ' + Cookies.set('keya') },
+                })
+                .then(function(res) {
+                    _this.Modal1data = res.data.message
+                })
+                .catch(function(err) {
+                    _this.$Notice.error({ title: '用户错误' });
+                })
+        },
         moving() {
             // 转移 类表
             let _this = this;
@@ -528,6 +673,40 @@ export default {
                             _this.$Message.success('房源转移成功');
                             _this.Modal1 = false
                             _this.loading2 = false;
+                        } else {
+                            _this.$Notice.error({ title: res.data.message });
+                            _this.loading2 = false;
+                        }
+                    })
+                    .catch(function(err) {
+                        _this.$Notice.error({ title: '转移错误' });
+                        _this.loading2 = false;
+                    })
+            }
+        },
+        moving23() {
+            // 转移 类表
+            let _this = this;
+            _this.loading2 = true;
+            if (_this.ascription == '') {
+                _this.$Message.warning('选择房源转移用户');
+                _this.loading2 = false;
+            } else {
+                axios({
+                        method: 'post',
+                        url: '/api/useracti4',
+                        headers: { Authorization: 'Bearer ' + Cookies.set('keya') },
+                        data: {
+                            id: _this.id,
+                            name: _this.ascription
+                        }
+                    })
+                    .then(function(res) {
+                      console.log(res)
+                        if (res.data.statusx == 200) {
+                            _this.$Message.success('客户转移成功');
+                            _this.Modal123 = false
+                            _this.loading23 = false;
                         } else {
                             _this.$Notice.error({ title: res.data.message });
                             _this.loading2 = false;
@@ -641,11 +820,11 @@ export default {
             this.$refs['Modal1data3ses'].validate((valid) => {
                 if (valid) {
                     let _this = this;
-                    _this.Modal1data4 = {
-                        name: '',
-                        note: '',
-                        checkAllGroup: []
-                    };
+                    // _this.Modal1data4 = {
+                    //     name: '',
+                    //     note: '',
+                    //     checkAllGroup: []
+                    // };
                     _this.loading5 = true
                     axios({
                             method: 'post',

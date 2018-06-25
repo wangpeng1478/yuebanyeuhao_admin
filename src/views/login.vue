@@ -232,6 +232,15 @@
                             </ul>
                     </div>
                 </Modal>
+                <Modal v-model="modals3" title="手机二维码访问" width="300">
+                    <div style="text-align: center;">
+                        <canvas id="qrccode-canvas-deng"></canvas>
+                        <a style="display: block" :href="h5url" target="_blank">直接访问</a>
+                    </div>
+                     <div slot="footer" style="text-align: center;color: #F44336;">
+                        <p><Icon type="alert-circled"></Icon> 目前属于开发阶段 部分功能未完善</p>
+                    </div>
+                </Modal>
                 </div>
             </Card>
         </div>
@@ -244,11 +253,14 @@
                     <a href="javascript:;" @click="modals2 = true">使用帮助</a>
                     <span class="pipe">|</span>
                     <a href="http://www.yuebanyuehao.com/" target="_blank">悦办越好</a>
+                    <span class="pipe">|</span>
+                    <a href="javascript:;" @click="deodasdar">手机访问</a>
                 </nav>
                 <p>Copyright © 2013-2018 All Rights Reserved</p>
                 <p>上海德御房地产经纪事务所</p>
                 <p>企业选址专业服务商</p>
             </div>
+            
         </footer>
     </div>
 </template>
@@ -258,6 +270,9 @@ import Cookies from 'js-cookie';
 import localStorages from '../localStorage/localStorage';
 // import $ from 'jquery';
 import axios from 'axios'
+import qrcode from 'qrcode'
+var QRCode = require('qrcode')
+var canvas = ''
 export default {
     data() {
         return {
@@ -284,8 +299,10 @@ export default {
             spinShow: false,
             img: '',
             captcha_key: '',
+            h5url: 'http://www.yuebanyuehao.com/admin/h5/index.html',
             modals: false,
             modals2: false,
+            modals3: false,
         };
     },
     beforeCreate() {
@@ -313,6 +330,7 @@ export default {
         this.form.verification = ''; //默认验证码
         this.Verification(); //默认验证码
         this.tianqi(); //默认验证码
+        // this.qrcode(); //默认验证码
         // console.log(Cookies.set('keys'))
     },
     methods: {
@@ -424,7 +442,7 @@ export default {
 
         },
         deodasda(){
-            var eleTextarea = '[InternetShortcut]\nURL=http://www.yuebanyuehao.com/'
+            var eleTextarea = '[InternetShortcut]\nURL=http://www.yuebanyuehao.com/admin/index.html'
             // 下载文件方法
             var funDownload = function (content, filename) {
                 var eleLink = document.createElement('a');
@@ -456,7 +474,21 @@ export default {
               .catch(function (err) {
                   // _this.$Notice.error({title: '区域错误'});
               })
-        }
+        },
+        deodasdar(){
+            this.qrcode();
+            this.modals3 =true
+        },
+        qrcode () {
+          let url = this.h5url
+          QRCode.toCanvas(document.getElementById('qrccode-canvas-deng'), url, (error) => {
+            if (error) {
+              console.log(error)
+            } else {
+              // console.log('ok')
+            }
+          })
+       }  
     }
 };
 

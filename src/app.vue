@@ -44,7 +44,7 @@ html,body{
 }
 .cf:after, .cf:before {
     content: "";
-    display: table;
+    display:table;
 }
 
 ::-webkit-scrollbar {
@@ -57,7 +57,7 @@ html,body{
     border-radius: 2px;
 }
  pre {
-     display: none;
+     display:none;
      background: #495060;
      color: #e2e2e2;
      padding: 10px;
@@ -65,7 +65,7 @@ html,body{
      max-height: 300px;
      overflow: auto;
  }
-.building .input-group span {
+ .input-group span{
     width: 25% !important;
 }
 </style>

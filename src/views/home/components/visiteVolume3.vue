@@ -147,7 +147,7 @@
 		            刷新
 		        </a>
                 <div class="demo-tabs-style2">
-                  <Tabs type="card" :animated="false" @on-click="TabsQ" v-if="access" style="margin-bottom: -38px;">
+                  <Tabs type="card" :value="searchFole.Tabs" :animated="false" @on-click="TabsQ" v-if="access" style="margin-bottom: -38px;">
                     <TabPane label="发件箱">发件箱</TabPane>
                     <TabPane label="收件箱">收件箱</TabPane>
                   </Tabs>
@@ -341,7 +341,7 @@ export default {
            let _this = this;
             axios({
                 method:'post',
-                url:'/api/adminname2',
+                url:'/api/adminname2x',
                 headers:{Authorization:'Bearer '+Cookies.set('keya')},
              })
             .then(function (res) {

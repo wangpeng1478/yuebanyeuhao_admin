@@ -74,7 +74,7 @@
 }
 
 
-@media print {
+    @media print {
         #pdfDom{
             position: fixed !important;
             top: 0 !important;
@@ -146,7 +146,12 @@
               </p>
                 <Button style='margin:5px' type="primary" icon="image" @click="exportImage">导出表格为图片</Button>
                 <!-- <Button style='margin:5px' type="primary" icon="image" @click="getPdf()">导出表格为PDF</Button> -->
-                <Button style='margin:5px' type="primary" icon="printer" @click="printer">打印</Button>
+                <Button style='margin:5px' type="primary">
+                   <a style="color: #fff;" 
+                   target="_blank" 
+                   :href="dayinurl">
+                   <Icon type="printer"></Icon> 打印</a>
+                </Button>
                 <div id="showImage" style="display: none;">
                     <img id="exportedImage" />
                 </div>
@@ -157,6 +162,7 @@
 </template>
 
 <script>
+
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import html2canvas from 'html2canvas';
@@ -166,6 +172,7 @@ export default {
         return {
             id:'',
             name:'',
+            dayinurl:'',
             imageName: '企业名录打印',
             htmlTitle:"qwerdf",//这个是pdf文件的名字
             TableData:[]
@@ -176,10 +183,13 @@ export default {
         this.name = this.$route.query.name; //id
         this.imageName = this.$route.query.name; //id
         this.htmlTitle = this.$route.query.name; //id
+        let urlname = encodeURI(encodeURI(this.$route.query.name));
+        // console.log(urlname)
+        this.dayinurl = 'http://www.yuebanyuehao.com/admin/printer.html?id='+this.$route.query.deal_id+'&name='+urlname+"&key="+Cookies.set('keya')
         this.showHide()
      },
     methods: {
-     showHide(){
+      showHide(){
           //展开 收缩
           var _this = this;
             axios({

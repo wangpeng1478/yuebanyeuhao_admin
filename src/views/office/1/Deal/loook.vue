@@ -461,37 +461,37 @@ export default {
               headers: { Authorization: 'Bearer ' + Cookies.set('keya') },
           })
           .then(function(res){
-             _this.data = res.data.message.data
+              _this.data = res.data.message.data
               let a = res.data.message.Timeline;
-              if (a[0]){
-                _this.Timeline = 0
-                _this.Timelines = '业务合作人确认'
-              }
-               if(a[1]){
-                _this.Timeline = 1
-                _this.Timelines = '房源归属人确认'
-              }
-               if(a[2]){
-                _this.Timeline = 2
-                _this.Timelines = '照片归属人确认'
-              }
-               if(a[3]){
-                _this.Timeline = 3
-                _this.Timelines = '经理确认'
-              }
-               if(a[4]){
-                _this.Timeline = 4
-                _this.Timelines = '行政确认'
-              }
-               if(a[5]){
-                _this.Timeline = 5
-                _this.Timelines = '财务确认'
-              }
-               if(a[6]){
+               if(!a[6]){
                  _this.Timeline = 6
                  _this.Timelines = '总经理确认'
               }
-              // console.log(a)
+               if(!a[5]){
+                _this.Timeline = 5
+                _this.Timelines = '财务确认'
+              }
+               if(!a[4]){
+                _this.Timeline = 4
+                _this.Timelines = '行政确认'
+              }
+               if(!a[3]){
+                _this.Timeline = 3
+                _this.Timelines = '经理确认'
+              }
+               if(!a[2]){
+                _this.Timeline = 2
+                _this.Timelines = '照片归属人确认'
+              }
+               if(!a[1]){
+                _this.Timeline = 1
+                _this.Timelines = '房源归属人确认'
+              }
+              if(!a[0]){
+                _this.Timeline = 0
+                _this.Timelines = '业务合作人确认'
+              }
+              console.log(a)
               _this.sedd = a;
               _this.amendx = res.data.message.amendx
               _this.wen = res.data.message.fi

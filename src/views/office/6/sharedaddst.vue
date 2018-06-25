@@ -57,10 +57,12 @@
 
 <template>
    <div class="sharedaddst cf">
-   <pre>{{sharedadds}}</pre>
+   <pre>{{sharedadds.addlouse}}</pre>
+   <pre>{{sharedadds.addprivates}}</pre>
    <pre>{{imgs}}</pre>
+   <pre>{{dataimg2}}</pre>
    <div v-if="lodasda">
-         <Form :model="sharedadds" :label-width="100">
+        <Form :model="sharedadds" :label-width="100">
          <Row>
            <Col :xs="24" :sm="24" :md="8" :lg="6" style="padding:5px">
             <Card style="max-height:782px;min-height:200px;overflow:auto">
@@ -70,40 +72,65 @@
               </p>
 
                 <Card class="Cardsr" v-for="(n, index) in sharedadds.addlouse" :key="n.length" v-if="n.id !==0">
-                    <p slot="title">普通楼盘({{n.name}})</p>
+                    <p slot="title">{{n.img.length}}普通({{n.name}})</p>
                      <a href="#" slot="extra">
                      <!-- @click.prevent="changeLimit" -->
-                       <Tooltip content="添加详细信息" placement="top">
-                            <Button @click.prevent="changeLimit(n.uniqidof)" size="small" type="error"><Icon type="plus-circled"></Icon></Button>
+                      <a v-if="adminTrue" href="#" @click.prevent="changeLimit3(n.uniqidof)">click</a>
+                       <Tooltip content="删除" placement="top">
+                            <Button @click.prevent="changeLimit(n.id)" size="small" type="error"><Icon type="android-remove-circle"></Icon></Button>
                         </Tooltip>
                         <Tooltip content="添加工位" placement="top">
                            <Button @click.prevent="changegong(n.id)" size="small" type="primary"><Icon type="plus-round"></Icon></Button>
                         </Tooltip>
+                         <Tooltip content="添加照片" placement="top">
+                           <Button @click.prevent="addimgs(0,n.id,index)" size="small" type="primary"><Icon type="android-add-circle"></Icon></Button>
+                        </Tooltip>
                     </a>
                    <FormItem :label="'楼盘 ' + index">
-                       <InputNumber :max="100" :min="1" v-model="n.layer"></InputNumber>
-                       <span class="sanwei">层</span>
+                       <Input v-model="n.layer"></Input>
+                       <!-- <span class="sanwei">层</span> -->
                    </FormItem>
                 </Card>
 
                 <Card class="Cardsr" v-for="(n, index) in sharedadds.addprivates" :key="n.length" v-if="n.id !==0">
-                    <p slot="title"></span>专用大楼({{n.louname}})</p>
+                    <p slot="title"></span>{{n.img.length}}专用({{n.louname}})</p>
                      <a href="#" slot="extra">
                      <!-- @click.prevent="changeLimit" -->
-                       <Tooltip content="添加详细信息" placement="top">
-                            <Button @click.prevent="changeLimit(n.uniqidof)" size="small" type="error"><Icon type="plus-circled"></Icon></Button>
+                     <a v-if="adminTrue" href="#" @click.prevent="changeLimit3(n.uniqidof)">click</a>
+                       <Tooltip content="删除" placement="top">
+                            <Button @click.prevent="changeLimit(n.id)" size="small" type="error"><Icon type="plus-circled"></Icon></Button>
                         </Tooltip>
                         <Tooltip  content="添加工位" placement="top">
                            <Button @click.prevent="changegong(n.id)" size="small" type="primary"><Icon type="plus-round"></Icon></Button>
+                        </Tooltip>
+                         <Tooltip content="添加照片" placement="top">
+                           <Button @click.prevent="addimgs(1,n.id,index)" size="small" type="primary"><Icon type="android-add-circle"></Icon></Button>
                         </Tooltip>
                     </a>
                    <FormItem :label="'楼盘 ' + index">
                        <Cascader class="wi3d" :data="region" v-model="n.regions"></Cascader>
                        <Input class="wi3d" v-model="n.address" placeholder='显示地址'></Input>
-                       <InputNumber :max="100" :min="1" v-model="n.layer"></InputNumber>
-                       <span class="sanwei">层</span>
+                       <Input v-model="n.layer"></Input>
+                       <!-- <span class="sanwei">层</span> -->
                    </FormItem>
                 </Card>
+
+
+                 <Modal v-model="modal2" width="800" :closable="false" :mask-closable="false">
+                  <p slot="header">
+                      <Icon type="ios-cloud-upload-outline"></Icon>
+                      <span>上传图片</span>
+                  </p>
+                  <div>
+                      <Uploads v-if="Uploadst" v-bind:dataimg="dataimg2" ref="imgadd2"></Uploads>
+                      <span v-else>加载中...</span>
+                  </div>
+                  <div slot="footer">
+                      <Button type="primary" :loading="loadinge" @click="outlinese">添加</Button>
+                      <Button type="text" @click="modal2 = false,dataimg2 = []">取消</Button>
+                  </div>
+               </Modal>
+
             </Card>
            </Col>
             <Col :xs="24" :sm="24" :md="16" :lg="18" style="padding:5px">
@@ -122,11 +149,12 @@
               <Row>
                 <Col>
                    <FormItem label="添加楼盘"  class="ivu-form-item-required">
-                        <Tooltip content="添加专用大楼" placement="top">
-                            <Button @click="addprivate" icon="ios-plus">添加专用大楼</Button>
-                        </Tooltip>
+                       
                         <Tooltip content="添加更多楼盘" placement="top">
                             <Button @click="addlou" icon="ios-plus-outline">添加更多楼盘</Button>
+                        </Tooltip>
+                         <Tooltip content="添加专用大楼" placement="top">
+                            <Button @click="addprivate" icon="ios-plus">添加专用大楼</Button>
                         </Tooltip>
                   </FormItem>
                 </Col>
@@ -144,8 +172,8 @@
                          placeholder = '请搜索楼盘'>
                           <Option v-for="(option, index) in optionsName" :value="option.value" :key="index">{{option.label}}</Option>
                        </Select>
-                       <InputNumber :max="100" :min="1" v-model="n.layer"></InputNumber>
-                       <span class="sanwei">层</span>
+                       <Input style="max-width: 100px; display: inline-block;" v-model="n.layer"></Input>
+                       <!-- <span class="sanwei">层</span> -->
                         <Poptip
                           confirm
                           :title="'确定删除 楼盘' + index"
@@ -162,8 +190,8 @@
                        <Cascader class="wi3d" :data="region" v-model="n.regions"></Cascader>
                        <Input class="wi3d" v-model="n.louname" placeholder='楼盘名称'></Input>
                        <Input class="wi3d" v-model="n.address" placeholder='显示地址'></Input>
-                       <InputNumber :max="100" :min="1" v-model="n.layer"></InputNumber>
-                       <span class="sanwei">层</span>
+                       <Input style="max-width: 100px; display: inline-block;" v-model="n.layer"></Input>
+                       <!-- <span class="sanwei">层</span> -->
                         <Poptip
                           confirm
                           :title="'确定删除 专用大楼' + index"
@@ -235,20 +263,22 @@
          </Form>
        
 
-        <Card style="margin-top:15px;">
-           <p slot="title">
+        <Card style="margin-top:15px;" v-if="!modal2">
+            <p slot="title">
                 <Icon type="images"></Icon>
                 添加品牌图片
             </p>
-             <Uploads v-bind:dataimg="dataimg" ref="imgadd"></Uploads>
+          <!--   <p>一张</p> -->
+            <Uploads v-bind:dataimg="dataimg" ref="imgadd"></Uploads>
         </Card>
 
         <Card style="margin:15px 0 30px 0;text-align: center;">
-               <Button @click="handleSubmit" type="success" size="large" long :loading="loading">
-                 <span v-if="!loading">修改品牌</span>
-                 <span v-else>修改品牌中...</span>
-               </Button>
-       </Card>
+           <Button @click="handleSubmit" type="success" size="large" long :loading="loading">
+             <span v-if="!loading">修改品牌</span>
+             <span v-else>修改品牌中...</span>
+           </Button>
+        </Card>
+
        </div>
        <Card v-else>加载中...</Card>
    </div>
@@ -268,14 +298,20 @@ export default {
       data () {
           return {
              id:'',
+             id2:'',
              region:[],//区域
              optionsName:[], //lou
              indeterminate1: false,
+             loadinge: false,
              lodasda:false,
+             modal2:false,
+             Uploadst:false,
              checkAll1: false,
+             dataimg2:[],
              indeterminate12: false,
              checkAll12: false,
              loading:false,
+             adminTrue:false,
              imgs:[],
              jichu:['前台接待', '书吧', '洽谈室', '办公清洁', '办公家具', '休闲区', '视频远程会议', '茶点', '复印打印', '健身设施', '多功能厅', '免费咖啡', '传真', '中央空调', '咖啡厅', '饮用水', '办公宽带', '空气净化器', '茶水间', 'WIFI', '自动售货机', '冰箱'],
              qoue:['会议室', '微波炉', '卫生间配套', '办理证件', '投融资服务', '人力招聘', '运营服务', '公司年检', '营销推荐', '法律咨询', '商务聚会', '财税代理', '宣传设计', '人事代理', '政策申请', '政策顾问', '创业辅导'],
@@ -293,6 +329,10 @@ export default {
             this.quyu();
             this.ajaxName();//大楼名字
             this.datse();//data
+            // adminTrue
+            if (Cookies.set('user') == 'admin') {
+              this.adminTrue = true
+            }
         },
         methods:{
          datse(){
@@ -304,6 +344,7 @@ export default {
               headers:{Authorization:'Bearer '+Cookies.set('keya')},
            })
             .then(function (res) {
+               console.log(res)
                _this.dataimg = res.data.message.img;
                _this.sharedadds = res.data.message.name
               _this.lodasda = true
@@ -403,16 +444,90 @@ export default {
              }
          },
          changeLimit(e){
-            let query = { deal_id: e};
-              this.$router.push({
-               name: 'sharedadd_edit',
-               query: query
-              });
+            console.log(e)
+            const msg = this.$Message.loading({
+                    content: 'Loading...',
+                    duration: 0
+                });
+            let _this = this;
+          axios({
+              method:'post',
+              url:'/api/sharedel',
+              headers:{Authorization:'Bearer '+Cookies.set('keya')},
+              data:{
+                sh2id:e
+              }
+           })
+          .then(function (res) {
+            console.log(res)
+            _this.datse();//data
+            setTimeout(msg, 0);
+            _this.$Message.info('删除成功');
+          })
+          .catch(function (err) {
+              _this.$Notice.error({title: '错误'});
+          })
+
+         },
+         addimgs(a,b,c){
+          this.id2 = b
+          this.modal2 = true
+          this.dataimg2 = [] //res
+          if (a==0) {
+            console.log('普通')
+            console.log(this.sharedadds.addlouse[c].img)
+            this.dataimg2 = this.sharedadds.addlouse[c].img
+
+          }else if(a==1){
+            console.log('专用')
+            console.log(c)
+            console.log(this.sharedadds.addprivates[c].img)
+            this.dataimg2 = this.sharedadds.addprivates[c].img
+          }
+          console.log(b)
+          this.Uploadst = false;
+           setTimeout(()=>{
+               this.Uploadst = true
+            },200)
+         },
+         outlinese(){
+           console.log(this.$refs.imgadd2.img)
+           console.log(this.id2)
+           this.loadinge = true;
+           let _this = this;
+           // console.log(_this.dataimg2)
+            axios({
+              method:'post',
+              url:'/api/shimgact',
+              headers:{Authorization:'Bearer '+Cookies.set('keya')},
+              data:{
+                sh2id:_this.id2,
+                jo:_this.$refs.imgadd2.img
+              }
+           })
+            .then(function (res){
+              _this.loadinge = false;
+              _this.modal2 = false
+              _this.dataimg2 = []
+              _this.datse();//data
+            })
+            .catch(function (err) {
+                _this.$Notice.error({title: '1失败'});
+            })
+
          },
          changegong(e){
             let query = { id: e};
               this.$router.push({
                name: 'shared_addg',
+               query: query
+              });
+         },
+         changeLimit3(e){
+          console.log(e)
+            let query = { deal_id: e};
+              this.$router.push({
+               name: 'sharedadd_edit',
                query: query
               });
          },
