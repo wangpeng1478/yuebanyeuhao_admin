@@ -869,7 +869,7 @@ export default {
           },
           changqeeeeee(value){
             let _this = this;
-            if (value !== '') {
+            if (value !== undefined) {
               axios({
                 method:'post',
                 url:'/api/lagaadd?name='+value,

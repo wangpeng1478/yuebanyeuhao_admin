@@ -912,7 +912,7 @@ export default {
 
             // this.showHide(1); //table
             if (Cookies.getJSON('screense3') ==0 || Cookies.getJSON('screense3') == undefined ) {
-              this.showHide(1); //类表
+                 this.showHide(1); //类表
              }else{
                let se = Cookies.getJSON('screense3')
                let page = Cookies.getJSON('page3')
@@ -980,13 +980,16 @@ export default {
               if (res.data.statusx == 200) {
                _this.followupdata = res.data.message;
                for (var i = 0; i < _this.followupdata.length; i++) {
-                 if (_this.followupdata[i].children.length == 1) {
-                  _this.followupdata[i].children.push({
-                    value: '公共账号',
-                    label: '公共账号'
-                  })
+                
+                 if (_this.followupdata[i].value !=="全选" && _this.followupdata[i].value !=="1部") {
+                      _this.followupdata[i].children.push({
+                        value: '公共账号',
+                        label: '公共账号'
+                      })
                  }
-               }
+                    
+                 }
+                 
                _this.followupdata = res.data.message;
               }else{
                 _this.$Notice.error({title: '人员错误'});
@@ -1041,8 +1044,12 @@ export default {
                })
             },
          changepage(page) {
+          this.indextbody = -1
+          Cookies.remove('params2')
+          Cookies.set('screense3', this.screens); //权限
           var ele = document.getElementById('singlepagecon');
               ele.scrollTop = 0;
+              
               //翻页
               var _this = this;
               _this.loadings = true;
@@ -1054,6 +1061,7 @@ export default {
               }
             },
             soose(){
+              Cookies.set('screense3', this.screens); //权限
               this.showHidese(1)
             },
             screenss(){

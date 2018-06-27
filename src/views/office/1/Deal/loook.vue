@@ -429,7 +429,7 @@ export default {
                  Houston:'进账',//进账
                  Remarks:'',//备注
                  Major:'',//主成交姓名
-                 MajorY:'',//主成交业绩
+                 MajorY:'',//%
                  MajorJ:'',//主成交金额
                  cooperation:{
                   cooperationn:'',//合作人姓名

@@ -9,7 +9,7 @@
    <div class="loucontas cf">
     <pre>{{datas}}</pre>
     <Card v-if="shohide">
-     <Form :label-width="100">
+     <Form :label-width="70">
       <contactse :typedata="typedata" :datas="datas" ref="getInput"></contactse>
      </Form>
        <Card style="margin-top:15px;text-align: center;">
@@ -22,7 +22,7 @@
 
    <Card v-if="shohides">
 
-     <Form :label-width="100">
+     <Form :label-width="70">
        <contacts :typedata="typedata" ref="getInputs"></contacts>
      </Form>
 

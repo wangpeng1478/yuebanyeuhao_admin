@@ -657,7 +657,7 @@
                             <li contenteditable="true">手机:
                                 <input v-model="datas.phone" type="text" class="binpu">
                             </li>
-                            <li contenteditable="true">Emial:
+                            <li contenteditable="true">Email:
                                 <input v-model="datas.emial" type="text" class="binpu">
                             </li>
                             <!-- <li contenteditable="true">Emial: </li> -->

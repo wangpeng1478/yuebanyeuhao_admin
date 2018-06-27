@@ -1,5 +1,7 @@
 <style lang="less">
-
+  div .mce-edit-area iframe{
+    height:200px !important; 
+  }
 </style>
 
 <template>

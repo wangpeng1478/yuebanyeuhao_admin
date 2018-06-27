@@ -822,11 +822,19 @@ export default {
               _this.$Notice.error({title: '人员错误'});
           })
          //默认数据 1
-        
+        // if (Cookies.set('keya') == undefined) {
+
+        // }
 
         // this.showHide(1);
         if (Cookies.getJSON('screense2') ==0 || Cookies.getJSON('screense2') == undefined ) {
-             this.showHide(1); //类表
+              if (Cookies.set('page2') == undefined) {
+                 this.showHide(1); //类表
+              }else{
+                this.showHide(Number(Cookies.set('page2'))); //类表
+                console.log(Number(Cookies.set('page2')))
+                this.current =Number(Cookies.set('page2'))
+              }
           }else{
              let se = Cookies.getJSON('screense2')
              let page = Cookies.getJSON('page2')
@@ -1022,6 +1030,7 @@ export default {
             },
 
             changepage(page) {
+              Cookies.remove('params')
               var ele = document.getElementById('singlepagecon');
               ele.scrollTop = 0;
               //翻页

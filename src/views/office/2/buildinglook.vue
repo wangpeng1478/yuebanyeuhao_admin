@@ -216,7 +216,7 @@
             </div>
         </div>
         <div v-else>
-            <Button type="primary" size="small" @click="clickMaids(item.maid,index)">申请查看</Button>
+            <Button type="primary" size="small" @click="clickMaids(item.maid,index)">点击查看</Button>
         </div>
     </Card>
     <div>

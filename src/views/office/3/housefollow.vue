@@ -281,12 +281,12 @@
               <p v-if="n.moldx == '公司名称'"><Icon type="ios-home-outline"></Icon> {{n.moldx}}: {{n.subs}}</p>
               <p v-if="n.moldx == '手机'"><Icon type="iphone"></Icon> {{n.moldx}}: {{n.subs}}</p>
               <p v-if="n.moldx == '固话'"><Icon type="ios-telephone"></Icon> {{n.moldx}}: {{n.subs}}</p>
-              <p v-if="n.moldx == '名片正'"><Icon type="card"></Icon> {{n.moldx}}: <a href="#" @click.prevent='clickCard(n.subs)'>点击查看</a></p>
-              <p v-if="n.moldx == '名片反'"><Icon type="card"></Icon> {{n.moldx}}: <a href="#" @click.prevent='clickCard(n.subs)'>点击查看</a></p>
+              <p v-if="n.moldx == '名片正'"><Icon type="card"></Icon> {{n.moldx}}: <a href="#" @click.prevent='clickCard(n.subs)'>查看</a></p>
+              <p v-if="n.moldx == '名片反'"><Icon type="card"></Icon> {{n.moldx}}: <a href="#" @click.prevent='clickCard(n.subs)'>查看</a></p>
             </div>
           </div>
            <div v-else>
-              <Button type="primary" size="small" @click="clickMaids(item.maid,index)">申请查看</Button>
+              <Button type="primary" size="small" @click="clickMaids(item.maid,index)">点击查看</Button>
             </div>
           </Card>
 
@@ -325,7 +325,7 @@
 
           </Card>
 
-          <Card style="margin-bottom: 10px;max-height: 500px;overflow: auto;">
+          <Card style="margin-bottom: 10px;max-height: 500px;overflow: auto;" v-if="louman.length !==0">
               <p slot="title">
                  <Icon type="person-stalker"></Icon>
                   楼盘联系方式
@@ -342,12 +342,12 @@
               <p v-if="n.moldx == '公司名称'"><Icon type="ios-home-outline"></Icon> {{n.moldx}}: {{n.subs}}</p>
               <p v-if="n.moldx == '手机'"><Icon type="iphone"></Icon> {{n.moldx}}: {{n.subs}}</p>
               <p v-if="n.moldx == '固话'"><Icon type="ios-telephone"></Icon> {{n.moldx}}: {{n.subs}}</p>
-              <p v-if="n.moldx == '名片正'"><Icon type="card"></Icon> {{n.moldx}}: <a href="#" @click.prevent='clickCard(n.subs)'>点击查看</a></p>
-              <p v-if="n.moldx == '名片反'"><Icon type="card"></Icon> {{n.moldx}}: <a href="#" @click.prevent='clickCard(n.subs)'>点击查看</a></p>
+              <p v-if="n.moldx == '名片正'"><Icon type="card"></Icon> {{n.moldx}}: <a href="#" @click.prevent='clickCard(n.subs)'>查看</a></p>
+              <p v-if="n.moldx == '名片反'"><Icon type="card"></Icon> {{n.moldx}}: <a href="#" @click.prevent='clickCard(n.subs)'>查看</a></p>
             </div>
           </div>
            <div v-else>
-              <Button type="primary" size="small" @click="clickMaids(item.maid,index)">申请查看</Button>
+              <Button type="primary" size="small" @click="clickMaids(item.maid,index)">点击查看</Button>
             </div>
           </Card>
 
@@ -602,7 +602,13 @@ export default {
               .then(function(res){
                 // console.log(res.data.message.popup.date)
                 // console.log(res.data.message.popup.power)
-                _this.modal2r = res.data.message.popup.power
+                // fang09
+                if (Cookies.getJSON('auth').fang09) {
+                  _this.modal2r = false
+                }else{
+                  _this.modal2r = res.data.message.popup.power
+                }
+                
                 _this.popupdata = res.data.message.popup.date
                  _this.plus = res.data.message.plus
                  _this.reduce = res.data.message.reduce

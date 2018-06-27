@@ -915,11 +915,6 @@ export default {
                     title: '请填写客户姓名',
                 });
                 return false;
-             }else if (_this.clientadd.contact["0"].mail.name =='') {
-                this.$Notice.warning({
-                    title: '请填写客户邮箱',
-                });
-                return false;
              }else if (_this.clientadd.contact["0"].Identity =='') {
                 this.$Notice.warning({
                     title: '请填写客户身份',

@@ -206,7 +206,18 @@ export default {
                     headers: { Authorization: 'Bearer ' + Cookies.set('keya') }
                 })
                 .then(function(res) {
-                   console.table(res.data)
+                   console.log(res)
+                   if (res.data.message.power) {
+                       _this.$Notice.info({
+                            title: '客户提醒',
+                            desc: '有'+res.data.message.data.length+"条客户 需要跟进"
+                        });
+                   }else{
+                      _this.$Notice.info({
+                            title: '客户提醒',
+                            desc: "没有客户需要跟进"
+                        });
+                   }
                    if (res.data.message.power) {
                      if(Cookies.set('remind') == undefined){
                         Cookies.set('remind', 0,{ expires: 0.25 }); //6个小时

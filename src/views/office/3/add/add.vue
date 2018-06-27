@@ -504,7 +504,7 @@ export default {
         }else{
           this.addNubut = false;
         }
-        if (val <= 8) {
+        if (val <= 1) {
           this.remNubut = true;
         }else{
           this.remNubut = false;

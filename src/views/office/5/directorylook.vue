@@ -319,7 +319,7 @@
             </p>
             <p>公司:{{mean.gname}}</p>
             <p>大厦:{{mean.fname}}</p>
-            <p>层数:{{mean.hnumber}}</p>
+            <p>单元号:{{mean.floorx}}F - {{mean.hnumber}}</p>
          </Card>
              <Card style="margin-bottom: 10px;max-height:600px;overflow:auto">
                     <p slot="title">
