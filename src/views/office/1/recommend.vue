@@ -984,6 +984,7 @@ export default {
             this.indexs = -1
             this.img = this.datas.add[this.louindex].img
             this.modal2 = true
+            console.log(img)
         },
         onSuccess(response, file, fileList) {
             let img = 'http://47.98.155.165' + response.message
@@ -1001,16 +1002,34 @@ export default {
             }
         },
         selectSort(e, a) {
+            // let a = 'http://47.98.155.165' + a
             this.indexs = e;
-            if (this.imgindex == 1) {
+            if (a.substr(0, 4)=='http') {
+                if (this.imgindex == 1) {
                 this.datas.add[this.louindex].srcimg1 = a
+                }
+                if (this.imgindex == 2) {
+                    this.datas.add[this.louindex].srcimg2 = a
+                }
+                if (this.imgindex == 3) {
+                    this.datas.add[this.louindex].srcimg3 = a
+                }
+                console.log(a)
+            }else{
+                 let url = 'http://47.98.155.165' + a
+                 if (this.imgindex == 1) {
+                    this.datas.add[this.louindex].srcimg1 = url
+                }
+                if (this.imgindex == 2) {
+                    this.datas.add[this.louindex].srcimg2 = url
+                }
+                if (this.imgindex == 3) {
+                    this.datas.add[this.louindex].srcimg3 = url
+                }
+                console.log(url)
+            
             }
-            if (this.imgindex == 2) {
-                this.datas.add[this.louindex].srcimg2 = a
-            }
-            if (this.imgindex == 3) {
-                this.datas.add[this.louindex].srcimg3 = a
-            }
+            
         },
         aclick(url){
             let a = document.createElement('a');

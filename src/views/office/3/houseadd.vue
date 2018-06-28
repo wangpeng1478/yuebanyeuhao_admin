@@ -105,7 +105,7 @@
  <Form :model="houseadd" :label-width="80">
       <Card style="margin-bottom:15px;">
         <p slot="title">
-            基本信息
+            基本信息 {{houseadd.id}}
         </p>
           <Row>
             <Col :xs="18" :sm="18" :md="18" :lg="8">
@@ -204,7 +204,7 @@
                        </a>
                     </Poptip>
                    
-                   <Input v-model="n.area" @on-blur="Caaddjia" size="small" placeholder="面积"><span slot="append">m²</span></Input>
+                   <Input v-model="n.area" @on-change="Caaddjia" size="small" placeholder="面积"><span slot="append">m²</span></Input>
                    <Input v-model="n.note" size="small" type="textarea" placeholder="备注" style="margin-top:5px;"></Input>
                   </Card>
                 </Card>
@@ -215,7 +215,7 @@
           <Row>
           <Col style="width:278px;display:inline-block;">
              <FormItem label="总面积"  class="ivu-form-item-required">
-                <Input v-model="houseadd.area2" @on-blur="Caaddjias">
+                <Input v-model="houseadd.area2" @on-change="Caaddjias">
                    <span slot="append">m²</span>
                 </Input>
             </FormItem>
@@ -255,7 +255,7 @@
                      </Input>
                 </div>
                 <div class="jiagebose">
-                     <Input size="large" v-model="houseadd.money3" @on-blur="Caaddjias">
+                     <Input size="large" v-model="houseadd.money3" @on-change="Caaddjias">
                         <span slot="prepend">预估成交价</span>
                         <span slot="append">元/m²·天</span>
                      </Input>
@@ -274,7 +274,7 @@
              <Col>
               <FormItem label="物业费用">
                 <div style="width:195px;display:inline-block;">
-                    <Input placeholder="单价" v-model="houseadd.property" @on-blur="Caaddjias">
+                    <Input placeholder="单价" v-model="houseadd.property" @on-change="Caaddjias">
                         <span slot="append">元/m²</span>
                     </Input>
                 </div>
@@ -886,7 +886,7 @@ export default {
                   _this.houseadd.Addconditions = []
               })
               .catch(function (err) {
-                  _this.$Notice.error({title: '大楼参数错误'});
+                  // _this.$Notice.error({title: '大楼参数错误'});
               })
             }else{
                 console.log('kong')

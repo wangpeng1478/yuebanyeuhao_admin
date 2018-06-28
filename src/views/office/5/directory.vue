@@ -68,7 +68,7 @@
                   clearable
                   remote
                   :remote-method="remoteMethod"
-                  placeholder = '请搜索楼盘'
+                  :placeholder = "sesongs"
                   :loading="loadingse">
                       <Option v-for="(option, index) in optionsName" :value="option.value" :key="index">{{option.label}}</Option>
                   </Select>
@@ -213,6 +213,7 @@ export default {
             totals: 0, //总页数
             pageSize: 0, //每页显示
             totals1:0,
+            sesongs:'请搜索楼盘',
             spinShow: true,
             screense:false,// true 有搜索条件 false 无搜索条件
             optionsName: [], //房源名称input
@@ -399,7 +400,15 @@ export default {
           this.ajaxName();
           this.quyu();
           this.datie();
-          this.buildingls(1);
+          
+          console.log(Cookies.set('screensname'))
+          if (Cookies.set('screensname') == 0 || Cookies.set('screensname') == undefined){
+            this.buildingls(1);
+          }else{
+            this.sesongs = Cookies.set('screensname')
+            // this.screens.name = Cookies.set('screensname')
+            this.buildinglse2(1)
+          }
         },
         methods:{
           accesse(){
@@ -581,6 +590,40 @@ export default {
                 _this.$Notice.error({title: '类表错误'});
             })
           },
+          buildinglse2(e){
+            let _this = this;
+             _this.spinShow = true;
+            axios({
+                method:'post',
+                url:'/api/entelist?page='+e,
+                headers:{Authorization:'Bearer '+Cookies.set('keya')},
+                data:{
+                  jo:{
+                     name:Cookies.set('screensname'),//楼盘
+                     regions:[],//所在区域
+                     metro:'',//最近地铁
+                     layers:'',//所在楼层
+                     companyname:'',//公司名称
+                     scalex:'',//公司规模
+                     tradex:'',//公司规模
+                     timese:[],//租约到期
+                     grade:'',//是否在租
+                  }
+                }
+             })
+            .then(function (res) {
+              _this.spinShow = false;
+              _this.datale = res.data.message.data;
+              _this.pageSize = res.data.message.pageSize;
+              _this.totals = res.data.message.totals;
+               _this.totals1 = res.data.message.totals2
+              _this.$Message.success('楼盘：'+_this.totals+' 套');
+              _this.$Message.success('企业名录：'+_this.totals1+' 条');
+            })
+            .catch(function (err) {
+                _this.$Notice.error({title: '类表错误'});
+            })
+          },
          showHide(e,b){
             //展开 收缩
               var _this = this;
@@ -624,6 +667,7 @@ export default {
                 _this.toogless = -1;//防止分页加载index
                //搜索
                _this.buildinglse(1);
+                Cookies.set('screensname', this.screens.name,{ expires: 0.01 }); //权限
             },
             reson(){
               //重置
@@ -642,12 +686,14 @@ export default {
                    timese:[],//租约到期
                    grade:'',//是否在租
              }
+             Cookies.set('screensname', 0,{ expires: 0.01 }); //权限
+             this.sesongs = '请搜索楼盘'
             },
             printer(e,a){
-             let query = { 
-              deal_id: e,
-              name:a
-            };
+               let query = { 
+                deal_id: e,
+                name:a
+              };
                 this.$router.push({
                  name: 'print_s',
                  query: query
