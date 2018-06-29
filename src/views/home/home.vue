@@ -115,6 +115,7 @@ export default {
                                     on: {
                                         click: () => {
                                             // this.lookke(params.row.clid)
+                                            this.remind = false;
                                             let query = { deal_id: params.row.clid};
                                             this.$router.push({
                                              name: 'clientadd_look',
@@ -172,6 +173,7 @@ export default {
                                     on: {
                                         click: () => {
                                            // console.log(params.row.id)
+                                           this.remind2 = false;
                                            params.row.look = true
                                            this.lookese(params.row.id)
                                         }
@@ -218,12 +220,13 @@ export default {
                             desc: "没有客户需要跟进"
                         });
                    }
-                   if (res.data.message.power) {
-                     if(Cookies.set('remind') == undefined){
-                        Cookies.set('remind', 0,{ expires: 0.25 }); //6个小时
-                       _this.remind = res.data.message.power
-                    }
-                   }
+                   // if (res.data.message.power) {
+                   //   if(Cookies.set('remind') == undefined){
+                   //      Cookies.set('remind', 0,{ expires: 0.25 }); //6个小时
+                   //     _this.remind = res.data.message.power
+                   //  }
+                   // }
+                   _this.remind = res.data.message.power
                    _this.data = res.data.message.data
                    _this.$store.commit('setMessageCount', res.data.message.totals); 
                 })

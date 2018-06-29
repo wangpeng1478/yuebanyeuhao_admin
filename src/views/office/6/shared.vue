@@ -352,7 +352,7 @@
         </div>
       </div>
         <div style="padding:0 0 200px 0">
-          <Page class="cf pages" :total="totals" :page-size="pageSize"  @on-change="changepage" show-total show-elevator></Page>
+          <Page class="cf pages" :current="current" :total="totals" :page-size="pageSize"  @on-change="changepage" show-total show-elevator></Page>
         </div>
       <Spin size="large" fix v-if="spinShow"></Spin>
       <!-- se -->
@@ -377,6 +377,7 @@ export default {
              totals2:0,
              totals3:0,
              pageSize:0,
+             current:1,
              sesongs:'请搜索楼盘',
              screense:false,// true 有搜索条件 false 无搜索条件
              region:[],
@@ -432,12 +433,12 @@ export default {
             this.datiename();//大楼名字
             
 
-            if (Cookies.getJSON('screense3') ==0 || Cookies.getJSON('screense3') == undefined ) {
+            if (Cookies.getJSON('screense33') ==0 || Cookies.getJSON('screense33') == undefined ) {
                 this.buildingls(1);//表
                 console.log('no')
           }else{
-             let se = Cookies.getJSON('screense3')
-             let page = Cookies.getJSON('page3')
+             let se = Cookies.getJSON('screense33')
+             let page = Cookies.getJSON('page33')
               console.log('yes')
              this.sesongs = se.name
              this.screens.timese = se.timese
@@ -453,11 +454,13 @@ export default {
              if (page == undefined) {
                this.current = 1
                this.buildinglser(1)
+               console.log(page)
              }else{
-               this.current = page
+               this.current = Number(page)
                this.buildinglser(page); //类表
+               console.log(page)
              }
-             console.log(page)
+             
              
           }
 
@@ -683,7 +686,7 @@ export default {
                 url:'/api/sharelist?page='+e,
                 headers:{Authorization:'Bearer '+Cookies.set('keya')},
                 data:{
-                  jo:Cookies.getJSON('screense3')
+                  jo:Cookies.getJSON('screense33')
                 }
              })
             .then(function (res) {
@@ -702,22 +705,23 @@ export default {
               this.spinShow = true;
               this.screense = true; //有搜索条件
               this.buildinglse(1);
-              Cookies.set('screense3', this.screens); //权限
+              Cookies.set('screense33', this.screens); //权限
             },
           reson(){
               this.spinShow = true;
               this.screense = false; //wu搜索条件
               this.screens = {};
               this.buildingls(1)
-              Cookies.set('screense3', 0);
+              Cookies.set('screense33', 0);
               this.sesongs = '请搜索楼盘' 
           },
           changepage(page) {
             var ele = document.getElementById('singlepagecon');
               ele.scrollTop = 0;
               //翻页
+              Cookies.set('screense33', this.screens); //权限
               this.spinShow = true;
-              Cookies.set('page3', page); //权限
+              Cookies.set('page33', page); //权限
               if(this.screense) {
                 this.buildinglse(page)
               }else{
