@@ -1071,6 +1071,8 @@ export default {
                Cookies.set('screense3', _this.screens); //权限
                //搜索
                _this.showHidese(1);
+               Cookies.set('page3', 1)
+               this.current = 1;
                 // Cookies.set('screenss', true);
                 // Cookies.set('screens', _this.screens);
             },
@@ -1080,6 +1082,8 @@ export default {
               _this.screense = false; //无搜索条件
               _this.showHide(1);
               Cookies.set('screense3', 0); //权限
+              Cookies.set('page3', 1)
+              this.current = 1;
               _this.screens ={
                 name:'', //客户姓名
                  contact:'', //联系方式

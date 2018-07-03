@@ -202,7 +202,7 @@
                             <ul>
                                 <li style="color:red;">悦办越好管理系统 不支持IE浏览器、edge浏览器</li>
                                 <li>使用<b>谷歌浏览器</b>
-                                    <Icon type="social-chrome" size="20"></Icon> <a href="http://rj.baidu.com/soft/detail/14744.html?ald" target="_blank">点击下载</a></li>
+                                    <Icon type="social-chrome" size="20"></Icon> <a href="https://www.google.cn/chrome" target="_blank">点击下载</a></li>
                                 <li>如果您使用的是360浏览器 请点击地址栏的内核切换按钮 切换到<b>极速模式</b>
                                 <img src="https://dn-shimo-image.qbox.me/xKtn8BC5EWYXPM7P.png" alt="">
                                 <img src="http://stdl.qq.com/stdl/temp/faq/upload/qhgn1.png" alt="">
@@ -221,7 +221,7 @@
                                 <li>登录用户名为自己的<b>中文名称</b> </li>
                                 <li style="color:red;">悦办越好管理系统 不支持IE浏览器</li>
                                 <li>悦办越好管理系统推荐使用<b>谷歌浏览器</b>
-                                    <Icon type="social-chrome" size="20"></Icon> <a href="http://rj.baidu.com/soft/detail/14744.html?ald" target="_blank">点击下载</a></li>
+                                    <Icon type="social-chrome" size="20"></Icon> <a href="https://www.google.cn/chrome" target="_blank">点击下载</a></li>
                                 <li>如果您使用的是360浏览器、qq浏览器、uc浏览器、搜狗浏览器 请点击地址栏的内核切换按钮 切换到<b>极速模式</b>
                                   <img src="https://dn-shimo-image.qbox.me/xKtn8BC5EWYXPM7P.png" alt="">
                                   <img src="http://stdl.qq.com/stdl/temp/faq/upload/qhgn1.png" alt="">
@@ -238,7 +238,7 @@
                         <a style="display: block" :href="h5url" target="_blank">直接访问</a>
                     </div>
                      <div slot="footer" style="text-align: center;color: #F44336;">
-                        <p><Icon type="alert-circled"></Icon> 目前属于开发阶段 部分功能未完善</p>
+                        <!-- <p><Icon type="alert-circled"></Icon> 目前属于开发阶段 部分功能未完善</p> -->
                     </div>
                 </Modal>
                 </div>

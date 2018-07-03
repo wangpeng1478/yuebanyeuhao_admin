@@ -38,7 +38,7 @@
         <Row>
           <Col :xs="24" :sm="24" :md="24" :lg="24">
              <FormItem label="姓名">
-               <Input v-model="moldx.name"></Input>
+               <Input v-model="moldx.name" disabled></Input>
              </FormItem>  
           </Col>
            <Col :xs="24" :sm="24" :md="24" :lg="24">
@@ -85,7 +85,7 @@
          <Row>
             <Col :xs="24" :sm="24" :md="24" :lg="24">
                <FormItem label="手机">
-                 <Input  v-model="moldx.phonenumber.names">
+                 <Input  v-model="moldx.phonenumber.names" disabled>
                    <Button @click="clickaddp" slot="append" icon="plus"></Button>
                  </Input>
                </FormItem>  
@@ -105,8 +105,8 @@
           <Row>
             <Col :xs="24" :sm="24" :md="24" :lg="24">
                <FormItem label="固话">
-                 <Input v-model="moldx.fixedline.q" class="quhao" placeholder="区号"></Input>
-                 <Input v-model="moldx.fixedline.h" class="phones" placeholder='固话'>
+                 <Input v-model="moldx.fixedline.q" class="quhao" placeholder="区号" disabled></Input>
+                 <Input v-model="moldx.fixedline.h" class="phones" placeholder='固话' disabled>
                    <Button @click="clickaddf" slot="append" icon="plus"></Button>
                  </Input>
                </FormItem>  
@@ -136,7 +136,7 @@
           <Row>
             <Col :xs="24" :sm="24" :md="24" :lg="24">
                <FormItem label="邮箱">
-                 <Input v-model="moldx.mailbox"></Input>
+                 <Input v-model="moldx.mailbox" disabled></Input>
                </FormItem>  
             </Col>
           </Row>

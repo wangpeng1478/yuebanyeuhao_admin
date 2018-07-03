@@ -71,14 +71,14 @@
         span{
           display:inline-block;
           width:60px;
-          text-align:right;
+          text-align:left;
         }
       }
        p{
          span{
           display:inline-block;
           width:60px;
-          text-align:right;
+          text-align:left;
         }
         display:block;
         width:100%;
@@ -89,7 +89,7 @@
     }
   }
   .contactse{
-     width:45%;
+     width:48%;
      display:inline-block;
      margin-bottom:10px;
      vertical-align:top;
@@ -347,7 +347,7 @@
                     <li v-if="datas.posx !==''"><span>工位数:</span>{{datas.posx}}个</li>
                     <li v-if="datas.tradex !==''"><span>所在行业:</span>{{datas.tradex}}</li>
                     <li v-if="datas.timey !==''"><span>用房时间:</span>{{datas.timey}}</li>
-                    <li><span>客户等级:{{datas.grade}}级</span></li>
+                    <li v-if="datas.grade !==''"><span>客户等级:{{datas.grade}}级</span></li>
                     <li v-if="datas.OriginalAddress !=='请选择'"><span>原地址:</span>{{datas.OriginalAddress}}{{datas.OriginalAddress1}}{{datas.OriginalAddress2}}{{datas.OriginalAddress3}}{{datas.OriginalAddress4}}</li>
                     <li><span>用房原因:</span>{{datas.reasx}}</li>
                     <li v-if="datas.budgetx !==''"><span>总预算:</span>{{datas.budgetx}}元</li>
@@ -371,10 +371,10 @@
                       <Icon type="ios-keypad-outline"></Icon>
                       操作日志
                    </p>
-              <a href="#" slot="extra" @click.prevent="Edit">
-                 <Icon type="edit"></Icon>
-                  编辑
-               </a>
+	               <a href="#" slot="extra" @click.prevent="Edit">
+	                 <Icon type="edit"></Icon>
+	                  编辑
+	               </a>
                    <!-- time -->
             <div class="genjinse">
                 <div class="contents">
@@ -625,6 +625,6 @@ export default {
             }
 
         }
-}
+ }
 </script>
 

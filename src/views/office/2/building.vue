@@ -802,7 +802,7 @@ export default {
               var _this = this;
               _this.spinShow = true;
               _this.toogless = -1;//防止分页加载index
-              Cookies.set('page1', page); //权限
+              Cookies.set('page1', page);
 
               if(_this.screense) {
                 console.log('%c有条件','color:red')
@@ -867,7 +867,8 @@ export default {
               let _this = this;
               _this.buildingls(1); //类表
               _this.screense = false; //无搜索条件
-               Cookies.set('screense', 0); 
+               Cookies.set('screense', 0);
+               Cookies.remove('page1') 
               _this.sesongs = '请搜索楼盘'
               _this.toogless = -1;//防止分页加载index
               // _this.spinShow = true; //table looing

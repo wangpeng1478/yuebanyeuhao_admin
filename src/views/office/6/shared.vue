@@ -706,6 +706,8 @@ export default {
               this.screense = true; //有搜索条件
               this.buildinglse(1);
               Cookies.set('screense33', this.screens); //权限
+              Cookies.set('page33', 1)
+              this.current = 1
             },
           reson(){
               this.spinShow = true;
@@ -714,6 +716,8 @@ export default {
               this.buildingls(1)
               Cookies.set('screense33', 0);
               this.sesongs = '请搜索楼盘' 
+              Cookies.set('page33', 1)
+              this.current = 1
           },
           changepage(page) {
             var ele = document.getElementById('singlepagecon');

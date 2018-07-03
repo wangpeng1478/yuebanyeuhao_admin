@@ -159,13 +159,21 @@
                     padding: 1px 1px 0 24px
                 }
             }
+            .reooveButton{
+        	display:none;
         }
+        &:hover .reooveButton{
+        	display:block;
+        }
+        }
+        
     }
+
 }
 </style>
 <template>
     <div class="Deal">
-        <pre>{{searchFole}}</pre>
+        <pre>{{auth.user01}}</pre>
         <Row>
             <Col :xs="24" :sm="24" :md="24" :lg="24">
             <Card class='Tabss'>
@@ -208,8 +216,13 @@
                      </h3>
                         <span :title='item.id'>ID:{{item.id}}</span>
                         </Col>
-                        <Col class='li2 cf' :xs="12" :sm="6" :md="6" :lg="6">
-                        <span :title="item.Remarks">{{item.Remarks}}</span>
+                        <Col class='cf' :xs="12" :sm="6" :md="6" :lg="6">
+                          <Poptip
+					        confirm
+					        :title="'确定删除'+item.name"
+					        @on-ok="reoove(item.id)">
+					        <Button class="reooveButton" type="error" size="small" v-if="auth.user01">删除</Button>
+					    </Poptip>
                         </Col>
                         <Col class='li3 cf' :xs="12" :sm="6" :md="6" :lg="6">
                         <Poptip trigger="hover" placement="left-start">
@@ -262,6 +275,7 @@ export default {
     data() {
         return {
             time: new Date().toLocaleString(),
+            auth:Cookies.getJSON('auth'),
             options2: {
                 shortcuts: [{
                         text: '一周',
@@ -337,7 +351,7 @@ export default {
             this.funnelss = !this.funnelss
         },
         changeLimit(e) {
-            var _this = this;
+             var _this = this;
               _this.loading = true
                axios({
                     method: 'post',
@@ -376,6 +390,24 @@ export default {
             name: 'Deal_Looke',
             query: query
         });
+        },
+        reoove(e){
+          console.log(e)
+          var _this = this;
+              _this.loading = true
+               axios({
+                    method: 'post',
+                    url: '/api/deid1del?id='+e,
+                    headers: { Authorization: 'Bearer ' + Cookies.set('keya') }
+                })
+                .then(function(res) {
+                     _this.loading = false
+                     _this.changeLimit(1);
+                     _this.$Message.success('删除成功');
+                })
+                .catch(function(err) {
+                    _this.$Notice.error({ title: '类表错误' });
+                })
         }
     },
     watch: {

@@ -1065,11 +1065,15 @@ export default {
                _this.showHidese(1);
                // console.log('%c搜索','color:red')
                Cookies.set('screense2', _this.screens); //权限
+               Cookies.set('page2', 1)
+               this.current = 1;
             },
             reson(){
               //重置
               let _this = this;
-              Cookies.set('screense2', 0); 
+              Cookies.set('screense2', 0);
+               Cookies.set('page2', 1)
+               this.current = 1; 
               _this.screense = false; //无搜索条件
               _this.showHide(1);
               _this.sesongs = '请搜索楼盘'

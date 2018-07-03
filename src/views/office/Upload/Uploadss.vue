@@ -268,7 +268,7 @@ export default {
                // console.log(res.data.message)
                for (var i = 0; i < res.data.message.length; i++) {
                    _this.img.push({
-                      url:'http://47.98.155.165'+res.data.message[i],
+                      url:'http://www.yuebanyuehao.com'+res.data.message[i],
                       type:'',
                       eq:0
                    })
@@ -290,7 +290,7 @@ export default {
          let _this = this;
          let index = _this.img.length;
          _this.img.push({
-            url:'http://47.98.155.165'+response.message,
+            url:'http://www.yuebanyuehao.com'+response.message,
             type:'',
             eq:index
          })
@@ -352,7 +352,7 @@ export default {
             this.clickCards = true;
         },
         qrcode () {
-          let url = 'http://47.98.155.165/admin/upload.html?data='+this.webid+','+this.master
+          let url = 'http://www.yuebanyuehao.com/admin/upload.html?data='+this.webid+','+this.master
           QRCode.toCanvas(document.getElementById('qrccode-canvas'), url, (error) => {
             if (error) {
               console.log(error)
