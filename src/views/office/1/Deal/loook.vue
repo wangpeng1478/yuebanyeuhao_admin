@@ -463,6 +463,9 @@ export default {
           .then(function(res){
               _this.data = res.data.message.data
               let a = res.data.message.Timeline;
+	      if (_this.data.cooperation.cooperationJ==null || _this.data.cooperation.cooperationY==null || _this.data.cooperation.cooperationn==null) {
+                 a[0] = true
+              }
                if(!a[6]){
                  _this.Timeline = 6
                  _this.Timelines = '总经理确认'
