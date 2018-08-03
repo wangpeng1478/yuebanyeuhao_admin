@@ -134,20 +134,41 @@
                         <Radio label="女"></Radio>
                     </RadioGroup>
                  </FormItem>
-
-                 <FormItem label="客户手机"  class="ivu-form-item-required">
+                 
+                 <FormItem label="客户手机"  class="ivu-form-item-required" v-if="!n.re">
+                     <Input  v-model="n.phonenumber.name" disabled>
+                       <Button @click="addclient(index)" slot="append" icon="plus"></Button>
+                     </Input>
+                 </FormItem>
+                 <FormItem label="客户手机"  class="ivu-form-item-required" v-else>
                      <Input  v-model="n.phonenumber.name">
                        <Button @click="addclient(index)" slot="append" icon="plus"></Button>
                      </Input>
                  </FormItem>
                  <!-- add -->
-                  <FormItem label="客户手机"  class="ivu-form-item-required" v-for="(item, indexx) in n.phonenumber.add" :key="item.length">
-                     <Input  v-model="item.name">
+                  <FormItem label="客户手机"  class="ivu-form-item-required" v-for="(item, indexx) in n.phonenumber.add" :key="item.length" v-if="!item.yes">
+                     <Input v-model="item.name" disabled>
+                       <Button @click="removeclient(index,indexx)" slot="append" icon="minus-round"></Button>
+                     </Input>
+                  </FormItem>
+                   <FormItem label="客户手机"  class="ivu-form-item-required" v-for="(item, indexx) in n.phonenumber.add" :key="item.length" v-if="item.yes">
+                    <Input v-model="item.name">
                        <Button @click="removeclient(index,indexx)" slot="append" icon="minus-round"></Button>
                      </Input>
                   </FormItem>
                  <!-- add -->
-                 <FormItem label="客户座机"  class="ivu-form-item-required cf">
+                 <FormItem label="客户座机"  class="ivu-form-item-required cf" v-if="!n.re">
+                    <div style="display: inline-block;width:28%;vertical-align: top;">
+                      <Input v-model="n.tel.name" placeholder="区号" disabled></Input>
+                    </div>
+                     <div style="float:right;width:70%;vertical-align: top;">
+                       <Input v-model="n.tel.names" placeholder="电话" disabled>
+                        <Button @click="addclient1(index)" slot="append" icon="plus"></Button>
+                       </Input>
+                     </div>
+                 </FormItem>
+
+                  <FormItem label="客户座机"  class="ivu-form-item-required cf" v-else>
                     <div style="display: inline-block;width:28%;vertical-align: top;">
                       <Input v-model="n.tel.name" placeholder="区号"></Input>
                     </div>
@@ -158,7 +179,17 @@
                      </div>
                  </FormItem>
                  <!-- add -->
-                 <FormItem label="客户座机"  class="ivu-form-item-required cf" v-for="(item, indexx) in n.tel.add" :key="item.length">
+                 <FormItem label="客户座机"  class="ivu-form-item-required cf" v-for="(item, indexx) in n.tel.add" :key="item.length" v-if="!item.yes">
+                    <div style="display: inline-block;width:28%;vertical-align: top;">
+                      <Input v-model="item.name" placeholder="区号" disabled></Input>
+                    </div>
+                     <div style="float:right;width:70%;vertical-align: top;">
+                       <Input v-model="item.names" placeholder="电话" disabled>
+                        <Button @click="removeclient1(index,indexx)" slot="append" icon="minus-round"></Button>
+                       </Input>
+                     </div>
+                 </FormItem>
+                  <FormItem label="客户座机"  class="ivu-form-item-required cf" v-for="(item, indexx) in n.tel.add" :key="item.length" v-if="item.yes">
                     <div style="display: inline-block;width:28%;vertical-align: top;">
                       <Input v-model="item.name" placeholder="区号"></Input>
                     </div>
@@ -755,6 +786,7 @@ export default {
             },
            addclient(e){
             this.clientadd.contact[e].phonenumber.add.push({
+                   yes:true,
                    name:''
              })
            },
@@ -763,6 +795,7 @@ export default {
            },
            addclient1(e){
             this.clientadd.contact[e].tel.add.push({
+                  yes:true,
                   name:'',
                   names:'',
              })
@@ -808,6 +841,7 @@ export default {
          },
          addCliadd(){
            this.clientadd.contact.push({
+                    re:true,
                     name:'', //客户姓名
                     sex:'未知', //客户性别 未知 男  女
                     phonenumber:{
