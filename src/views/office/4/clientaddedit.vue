@@ -148,7 +148,7 @@
                  <!-- add -->
                   <FormItem label="客户手机"  class="ivu-form-item-required" v-for="(item, indexx) in n.phonenumber.add" :key="item.length" v-if="!item.yes">
                      <Input v-model="item.name" disabled>
-                       <Button @click="removeclient(index,indexx)" slot="append" icon="minus-round"></Button>
+                       <Button slot="append" icon="minus-round"></Button>
                      </Input>
                   </FormItem>
                    <FormItem label="客户手机"  class="ivu-form-item-required" v-for="(item, indexx) in n.phonenumber.add" :key="item.length" v-if="item.yes">
@@ -185,7 +185,7 @@
                     </div>
                      <div style="float:right;width:70%;vertical-align: top;">
                        <Input v-model="item.names" placeholder="电话" disabled>
-                        <Button @click="removeclient1(index,indexx)" slot="append" icon="minus-round"></Button>
+                        <Button slot="append" icon="minus-round"></Button>
                        </Input>
                      </div>
                  </FormItem>
